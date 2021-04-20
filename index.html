@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Emulator Intel 8086</title>
+</head>
+<body>
+    <main>
+        <label for="ax">AX</label><input type="text" name="ax" class="reg" value="0000">
+        <label for="bx">BX</label><input type="text" name="bx" class="reg" value="0000">
+        <label for="cx">CX</label><input type="text" name="cx" class="reg" value="0000">
+        <label for="dx">DX</label><input type="text" name="dx" class="reg" value="0000">
+        <button onclick="hexvalidate()">Validate</button>
+    </main>
+    <script>
+
+        let regs = ["ax", "bx", "cx", "dx"];
+
+        // HEX VALIDATION
+        function hexvalidate() {
+            let hexctrl = document.querySelectorAll(".reg").value;
+            console.log(hexctrl);
+            // let regExp = new RegExp(/^[0-9A-F]{1,4}$/i);
+            // if (!regExp.test(hexctrl))
+            //     alert('invalid');
+        }
+        
+    </script>
+</body>
+</html>
