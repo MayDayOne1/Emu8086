@@ -9,23 +9,56 @@
 </head>
 <body>
     <main>
-        <label for="ax">AX</label><input type="text" name="ax" class="reg" value="0000">
-        <label for="bx">BX</label><input type="text" name="bx" class="reg" value="0000">
-        <label for="cx">CX</label><input type="text" name="cx" class="reg" value="0000">
-        <label for="dx">DX</label><input type="text" name="dx" class="reg" value="0000">
-        <button onclick="hexvalidate()">Validate</button>
+        <span> </span>
+        <span>H</span>
+        <span>L</span>
+        <label for="ax">AX</label>
+        <input type="text" name="ah" class="reg" value="00">
+        <input type="text" name="al" class="reg" value="00">
+
+        <label for="bx">BX</label>
+        <input type="text" name="bh" class="reg" value="00">
+        <input type="text" name="bl" class="reg" value="00">
+
+        <label for="cx">CX</label>
+        <input type="text" name="ch" class="reg" value="00">
+        <input type="text" name="cl" class="reg" value="00">
+
+        <label for="dx">DX</label>
+        <input type="text" name="dh" class="reg" value="00">
+        <input type="text" name="dl" class="reg" value="00">
+
+        <button onclick="hexvalidate()" id="operation-btn" enabled>Validate</button>
+        <div id="ops">
+            Lista operacji:
+            <button class="op" onclick="mov()">MOV</button>
+            <button class="op" onclick="xchg()">XCHG</button>
+        </div>
     </main>
     <script>
-
-        let regs = ["ax", "bx", "cx", "dx"];
+        document.querySelector("#ops").style.setProperty("display", "none");
 
         // HEX VALIDATION
         function hexvalidate() {
-            let hexctrl = document.querySelectorAll(".reg").value;
-            console.log(hexctrl);
-            // let regExp = new RegExp(/^[0-9A-F]{1,4}$/i);
-            // if (!regExp.test(hexctrl))
-            //     alert('invalid');
+            let formdata = document.querySelectorAll(".reg");
+            let regArr = Array.from(formdata);
+            // console.log(regArr[0].value);
+
+            let regExp = new RegExp(/^[0-9A-F]{1,2}$/i);
+            for(let i = 0; i < regArr.length; i++) {
+                if (!regExp.test(regArr[i].value)) {
+                    // console.log(regArr[i].value);
+                    // document.querySelector("#operation-btn").innerHTML="ok";
+                    alert("Proszę wypełnić rejestry liczbami w systemie szesnastkowym - cyfry 0-9 i/lub znaki A-F");
+                } else {
+                    document.querySelector("#ops").style.setProperty("display", "block");
+                }         
+            }
+        }
+
+        // MOV
+        function mov() {
+            alert('ok');
         }
         
     </script>
