@@ -9,30 +9,37 @@
 </head>
 <body>
     <main>
-        <div id="main-regs">
-            <span> </span>
-            <span>H</span>
-            <span>L</span>
-            <label for="ax">AX</label>
-            <input type="text" name="ah" class="reg" id="ah" value="00">
-            <input type="text" name="al" class="reg" id="al" value="00">
-            <label for="bx">BX</label>
-            <input type="text" name="bh" class="reg" id="bh" value="00">
-            <input type="text" name="bl" class="reg" id="bl" value="00">
-            <label for="cx">CX</label>
-            <input type="text" name="ch" class="reg" id="ch" value="00">
-            <input type="text" name="cl" class="reg" id="cl" value="00">
-            <label for="dx">DX</label>
-            <input type="text" name="dh" class="reg" id="dh" value="00">
-            <input type="text" name="dl" class="reg" id="dl" value="00">
-            <button onclick="hexvalidate()" id="operation-btn" enabled>Validate</button>
-        </div>
+        <header>
+            <div id="main-regs">
+                <span> </span>
+                <span>H</span>
+                <span>L</span>
+                <label for="ax">AX</label>
+                <input type="text" name="ah" class="reg" id="ah" value="00" maxlength="2">
+                <input type="text" name="al" class="reg" id="al" value="00" maxlength="2">
+                <label for="bx">BX</label>
+                <input type="text" name="bh" class="reg" id="bh" value="00" maxlength="2">
+                <input type="text" name="bl" class="reg" id="bl" value="00" maxlength="2">
+                <label for="cx">CX</label>
+                <input type="text" name="ch" class="reg" id="ch" value="00" maxlength="2">
+                <input type="text" name="cl" class="reg" id="cl" value="00" maxlength="2">
+                <label for="dx">DX</label>
+                <input type="text" name="dh" class="reg" id="dh" value="00" maxlength="2">
+                <input type="text" name="dl" class="reg" id="dl" value="00" maxlength="2">
+                <button onclick="hexvalidate()" id="operation-btn" enabled>Validate</button>
+            </div>
+            <div id="history">
+                <h3>Historia operacji</h3>
+                <ul id="history-list"></ul>
+                <button onclick="clearHistory()">Wyczyść historię</button>
+            </div>
+        </header>
         <div id="ops">
             Lista operacji:
-            <button class="op" onclick="mov()">MOV</button>
-            <button class="op" onclick="xchg()">XCHG</button>
+            <button class="op" onclick="showComp('#regs-btns')">MOV</button>
+            <button class="op" onclick="showComp('#regs-btns')">XCHG</button>
         </div>
-        <div id="mov">
+        <div id="regs-btns">
             <span>Chcę przerzucić zawartość z rejestru: </span>
             <div class="choose-regs">
                 <div class="choose-regs-one">
@@ -76,7 +83,7 @@
                 <span>Z rejestru: <span id="from-reg"></span> </span> <br>
                 <span>Do rejestru: <span id="to-reg"></span> </span>
             </div>
-            <button>MOV</button>
+            <button onclick="mov()">MOV</button>
         </div>
     </main>
     <script>
@@ -100,6 +107,14 @@
             }
         }
 
+        function clearHistory() {
+            document.querySelector("#history-list").innerHTML = "";
+        }
+
+        function showComp(id) {
+            document.querySelector(id).style.setProperty("display", "block");
+        }
+
 
         // GET VALUE OF A REGISTER
         function getValue(id) {
@@ -115,9 +130,30 @@
             }
         }
 
+        // FETCH DATA FOR MOV AND XCHG
+        function fetchData() {
+            let from = document.querySelector("#from-reg").innerHTML;
+            let fromValue = from.substring(from.length-2, from.length);
+            let fromId = from.substring(0,2);
+            let fromIdLower = fromId.toLowerCase();
+            // console.log(from);
+            // console.log(fromValue);
+            // console.log(fromId);
+            let to = document.querySelector("#to-reg").innerHTML;
+            let toValue = to.substring(to.length-2, to.length);
+            let toId = to.substring(0,2);
+            let toIdLower = toId.toLowerCase();
+
+            let results = [fromValue, fromId, toId, toIdLower];
+
+            return results;
+        }
+
         // MOV
         function mov() {
-            alert('ok');
+            let results = fetchData();
+            document.querySelector("#"+results[3]).value = results[0];
+            document.querySelector("#history-list").innerHTML += "<li>MOV "+results[2]+", "+results[1]+"</li>";
         }
         
     </script>

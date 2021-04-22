@@ -14,8 +14,27 @@ main input {
     margin: 0 auto;
 }
 
+header {
+    display: flex;
+}
+
+#history {
+    margin-left: 20px;
+    overflow: auto;
+    height: 100px;
+    width: 100%;
+}
+
+#history li {
+    list-style-type: none;
+}
+
 #operation-btn {
     grid-column: 1 / 4; 
+}
+
+#regs-btns {
+    display: none;
 }
 
 .choose-regs {
