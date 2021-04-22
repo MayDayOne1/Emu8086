@@ -9,30 +9,74 @@
 </head>
 <body>
     <main>
-        <span> </span>
-        <span>H</span>
-        <span>L</span>
-        <label for="ax">AX</label>
-        <input type="text" name="ah" class="reg" value="00">
-        <input type="text" name="al" class="reg" value="00">
-
-        <label for="bx">BX</label>
-        <input type="text" name="bh" class="reg" value="00">
-        <input type="text" name="bl" class="reg" value="00">
-
-        <label for="cx">CX</label>
-        <input type="text" name="ch" class="reg" value="00">
-        <input type="text" name="cl" class="reg" value="00">
-
-        <label for="dx">DX</label>
-        <input type="text" name="dh" class="reg" value="00">
-        <input type="text" name="dl" class="reg" value="00">
-
-        <button onclick="hexvalidate()" id="operation-btn" enabled>Validate</button>
+        <div id="main-regs">
+            <span> </span>
+            <span>H</span>
+            <span>L</span>
+            <label for="ax">AX</label>
+            <input type="text" name="ah" class="reg" id="ah" value="00">
+            <input type="text" name="al" class="reg" id="al" value="00">
+            <label for="bx">BX</label>
+            <input type="text" name="bh" class="reg" id="bh" value="00">
+            <input type="text" name="bl" class="reg" id="bl" value="00">
+            <label for="cx">CX</label>
+            <input type="text" name="ch" class="reg" id="ch" value="00">
+            <input type="text" name="cl" class="reg" id="cl" value="00">
+            <label for="dx">DX</label>
+            <input type="text" name="dh" class="reg" id="dh" value="00">
+            <input type="text" name="dl" class="reg" id="dl" value="00">
+            <button onclick="hexvalidate()" id="operation-btn" enabled>Validate</button>
+        </div>
         <div id="ops">
             Lista operacji:
             <button class="op" onclick="mov()">MOV</button>
             <button class="op" onclick="xchg()">XCHG</button>
+        </div>
+        <div id="mov">
+            <span>Chcę przerzucić zawartość z rejestru: </span>
+            <div class="choose-regs">
+                <div class="choose-regs-one">
+                    <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
+                    <button id="from-bx">BX</button>
+                    <button id="from-cx">CX</button>
+                    <button id="from-dx">DX</button>
+                </div>
+                <div class="choose-regs-two">
+                    <button id="from-al" onclick="getValue('#from-al')">AL</button>
+                    <button id="from-ah" onclick="getValue('#from-ah')">AH</button>
+                    <button id="from-bl" onclick="getValue('#from-bl')">BL</button>
+                    <button id="from-bh" onclick="getValue('#from-bh')">BH</button>
+                    <button id="from-cl" onclick="getValue('#from-cl')">CL</button>
+                    <button id="from-ch" onclick="getValue('#from-ch')">CH</button>
+                    <button id="from-dl" onclick="getValue('#from-dl')">DL</button>
+                    <button id="from-dh" onclick="getValue('#from-dh')">DH</button>
+                </div>
+            </div>
+            <span>Do rejestru: </span>
+            <div class="choose-regs">
+                <div class="choose-regs-one">
+                    <button id="to-ax">AX</button>
+                    <button id="to-ax">BX</button>
+                    <button id="to-ax">CX</button>
+                    <button id="to-ax">DX</button>
+                </div>
+                <div class="choose-regs-two">
+                    <button id="to-al" onclick="getValue('#to-al')">AL</button>
+                    <button id="to-ah" onclick="getValue('#to-ah')">AH</button>
+                    <button id="to-bl" onclick="getValue('#to-bl')">BL</button>
+                    <button id="to-bh" onclick="getValue('#to-bh')">BH</button>
+                    <button id="to-cl" onclick="getValue('#to-cl')">CL</button>
+                    <button id="to-ch" onclick="getValue('#to-ch')">CH</button>
+                    <button id="to-dl" onclick="getValue('#to-dl')">DL</button>
+                    <button id="to-dh" onclick="getValue('#to-dh')">DH</button>
+                </div>
+            </div>
+            
+            <div id="mov-command">
+                <span>Z rejestru: <span id="from-reg"></span> </span> <br>
+                <span>Do rejestru: <span id="to-reg"></span> </span>
+            </div>
+            <button>MOV</button>
         </div>
     </main>
     <script>
@@ -53,6 +97,21 @@
                 } else {
                     document.querySelector("#ops").style.setProperty("display", "block");
                 }         
+            }
+        }
+
+
+        // GET VALUE OF A REGISTER
+        function getValue(id) {
+            let valueId = id.substring(id.length-2, id.length);
+            // console.log("valueID "+valueId);
+            let regValue = document.querySelector("#"+valueId).value;
+
+            // console.log(id.substring(1,5));
+            if(id.substring(1,5) === "from") {
+                document.querySelector("#from-reg").innerHTML = valueId.toUpperCase()+" - "+regValue;
+            } else {
+                document.querySelector("#to-reg").innerHTML = valueId.toUpperCase()+" - "+regValue;
             }
         }
 

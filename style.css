@@ -1,9 +1,12 @@
 main {
-    display: grid;
-    grid-template-columns: repeat(3, 30px);
     width: 400px;
     margin: 0 auto;
     text-align: center;
+}
+
+#main-regs {
+    display: grid;
+    grid-template-columns: repeat(3, 30px);
 }
 
 main input {
@@ -13,4 +16,23 @@ main input {
 
 #operation-btn {
     grid-column: 1 / 4; 
+}
+
+.choose-regs {
+    display: grid;
+    grid-template-rows: 25px 25px;
+}
+
+.choose-regs-one {
+    display: grid;
+    grid-template-columns: repeat(4, 80px);
+    text-align: center;
+    margin: 0 auto;
+}
+
+.choose-regs-two {
+    display: grid;
+    grid-template-columns: repeat(8, 40px);
+    text-align: center;
+    margin: 0 auto;
 }
