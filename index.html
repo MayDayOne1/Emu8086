@@ -44,9 +44,9 @@
             <div class="choose-regs">
                 <div class="choose-regs-one">
                     <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
-                    <button id="from-bx">BX</button>
-                    <button id="from-cx">CX</button>
-                    <button id="from-dx">DX</button>
+                    <button id="from-bx" onclick="getValue('#from-bx')">BX</button>
+                    <button id="from-cx" onclick="getValue('#from-cx')">CX</button>
+                    <button id="from-dx" onclick="getValue('#from-dx')">DX</button>
                 </div>
                 <div class="choose-regs-two">
                     <button id="from-al" onclick="getValue('#from-al')">AL</button>
@@ -62,10 +62,10 @@
             <span>Do rejestru: </span>
             <div class="choose-regs">
                 <div class="choose-regs-one">
-                    <button id="to-ax">AX</button>
-                    <button id="to-ax">BX</button>
-                    <button id="to-ax">CX</button>
-                    <button id="to-ax">DX</button>
+                    <button id="to-ax" onclick="getValue('#to-ax')">AX</button>
+                    <button id="to-ax" onclick="getValue('#to-bx')">BX</button>
+                    <button id="to-ax" onclick="getValue('#to-cx')">CX</button>
+                    <button id="to-ax" onclick="getValue('#to-dx')">DX</button>
                 </div>
                 <div class="choose-regs-two">
                     <button id="to-al" onclick="getValue('#to-al')">AL</button>
@@ -119,8 +119,27 @@
         // GET VALUE OF A REGISTER
         function getValue(id) {
             let valueId = id.substring(id.length-2, id.length);
+            let regValue = "";
             // console.log("valueID "+valueId);
-            let regValue = document.querySelector("#"+valueId).value;
+
+            //IF REGISTER HAS AN X
+            if(valueId.charAt(1) === "x") {
+                let firstLetter = valueId.charAt(0);
+                let valueH = "";
+                let valueL = "";
+
+                if(id.substring(1,5) === "from") {
+                    valueL = getValue("#from-"+firstLetter+"l");
+                    valueH = getValue("#from-"+firstLetter+"h");
+                } else {
+                    valueL = getValue("#to-"+firstLetter+"l");
+                    valueH = getValue("#to-"+firstLetter+"h");
+                }
+                regValue = valueH.concat(valueL);
+                // console.log(regValue);
+            } else {
+                regValue = document.querySelector("#"+valueId).value;
+            }
 
             // console.log(id.substring(1,5));
             if(id.substring(1,5) === "from") {
@@ -128,12 +147,19 @@
             } else {
                 document.querySelector("#to-reg").innerHTML = valueId.toUpperCase()+" - "+regValue;
             }
+
+            return regValue;
         }
 
         // FETCH DATA FOR MOV AND XCHG
         function fetchData() {
             let from = document.querySelector("#from-reg").innerHTML;
-            let fromValue = from.substring(from.length-2, from.length);
+            let fromValue = "";
+            if(from.length = 8) {
+                fromValue = from.substring(from.length-4, from.length);
+            } else {
+                fromValue = from.substring(from.length-2, from.length);
+            }
             let fromId = from.substring(0,2);
             let fromIdLower = fromId.toLowerCase();
             // console.log(from);
@@ -144,7 +170,7 @@
             let toId = to.substring(0,2);
             let toIdLower = toId.toLowerCase();
 
-            let results = [fromValue, fromId, toId, toIdLower];
+            let results = [fromValue, fromId, toId, toIdLower, fromIdLower];
 
             return results;
         }
@@ -152,7 +178,25 @@
         // MOV
         function mov() {
             let results = fetchData();
-            document.querySelector("#"+results[3]).value = results[0];
+            let valueL = "";
+            let valueH = "";
+            
+            // for(let i = 0; i < results.length; i++) {
+            //     console.log(i+": "+results[i]);
+            // }
+
+            if(results[4].charAt(1) == "x") {
+                valueH = results[0].substring(0,2);
+                valueL = results[0].substring(2);
+                // console.log(valueH);
+                // console.log(valueL);
+                let firstLetter = results[3].charAt(0);
+                // console.log(firstLetter);
+                document.querySelector("#"+firstLetter+"h").value = valueH;
+                document.querySelector("#"+firstLetter+"l").value = valueL;
+            } else {
+                document.querySelector("#"+results[3]).value = results[0];
+            }
             document.querySelector("#history-list").innerHTML += "<li>MOV "+results[2]+", "+results[1]+"</li>";
         }
         
