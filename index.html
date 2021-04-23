@@ -40,7 +40,7 @@
             <button class="op" onclick="showComp('#regs-btns')">XCHG</button>
         </div>
         <div id="regs-btns">
-            <span>Chcę przerzucić zawartość z rejestru: </span>
+            <span id="from-desc">Chcę przerzucić zawartość z rejestru: </span>
             <div class="choose-regs">
                 <div class="choose-regs-one">
                     <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
@@ -49,14 +49,14 @@
                     <button id="from-dx" onclick="getValue('#from-dx')">DX</button>
                 </div>
                 <div class="choose-regs-two">
-                    <button id="from-al" onclick="getValue('#from-al')">AL</button>
                     <button id="from-ah" onclick="getValue('#from-ah')">AH</button>
-                    <button id="from-bl" onclick="getValue('#from-bl')">BL</button>
+                    <button id="from-al" onclick="getValue('#from-al')">AL</button>
                     <button id="from-bh" onclick="getValue('#from-bh')">BH</button>
-                    <button id="from-cl" onclick="getValue('#from-cl')">CL</button>
+                    <button id="from-bl" onclick="getValue('#from-bl')">BL</button>
                     <button id="from-ch" onclick="getValue('#from-ch')">CH</button>
-                    <button id="from-dl" onclick="getValue('#from-dl')">DL</button>
+                    <button id="from-cl" onclick="getValue('#from-cl')">CL</button>
                     <button id="from-dh" onclick="getValue('#from-dh')">DH</button>
+                    <button id="from-dl" onclick="getValue('#from-dl')">DL</button>
                 </div>
             </div>
             <span>Do rejestru: </span>
@@ -68,14 +68,14 @@
                     <button id="to-ax" onclick="getValue('#to-dx')">DX</button>
                 </div>
                 <div class="choose-regs-two">
-                    <button id="to-al" onclick="getValue('#to-al')">AL</button>
                     <button id="to-ah" onclick="getValue('#to-ah')">AH</button>
-                    <button id="to-bl" onclick="getValue('#to-bl')">BL</button>
+                    <button id="to-al" onclick="getValue('#to-al')">AL</button>
                     <button id="to-bh" onclick="getValue('#to-bh')">BH</button>
-                    <button id="to-cl" onclick="getValue('#to-cl')">CL</button>
+                    <button id="to-bl" onclick="getValue('#to-bl')">BL</button>
                     <button id="to-ch" onclick="getValue('#to-ch')">CH</button>
-                    <button id="to-dl" onclick="getValue('#to-dl')">DL</button>
+                    <button id="to-cl" onclick="getValue('#to-cl')">CL</button>
                     <button id="to-dh" onclick="getValue('#to-dh')">DH</button>
+                    <button id="to-dl" onclick="getValue('#to-dl')">DL</button>
                 </div>
             </div>
             
@@ -84,6 +84,7 @@
                 <span>Do rejestru: <span id="to-reg"></span> </span>
             </div>
             <button onclick="mov()">MOV</button>
+            <button onclick="xchg()">XCHG</button>
         </div>
     </main>
     <script>
@@ -154,12 +155,13 @@
         // FETCH DATA FOR MOV AND XCHG
         function fetchData() {
             let from = document.querySelector("#from-reg").innerHTML;
-            let fromValue = "";
-            if(from.length = 8) {
-                fromValue = from.substring(from.length-4, from.length);
-            } else {
-                fromValue = from.substring(from.length-2, from.length);
-            }
+            // console.log("from.length: "+from.length);
+            // console.log("from: "+from);
+
+            let split = from.split(" - ");
+            // console.log(split);
+
+            let fromValue = split[1];
             let fromId = from.substring(0,2);
             let fromIdLower = fromId.toLowerCase();
             // console.log(from);
@@ -199,7 +201,30 @@
             }
             document.querySelector("#history-list").innerHTML += "<li>MOV "+results[2]+", "+results[1]+"</li>";
         }
-        
+
+        // XCHG
+        function xchg() {
+            let results = fetchData();
+            let temp = "";
+
+            if(results[4].charAt(1) == "x") {
+                let firstLetterTo = results[3].charAt(0);
+                let firstLetterFrom = results[4].charAt(0);
+                // console.log(firstLetterFrom);
+                temp = document.querySelector("#"+firstLetterTo+"h").value;
+                document.querySelector("#"+firstLetterTo+"h").value = document.querySelector("#"+firstLetterFrom+"h").value;
+                document.querySelector("#"+firstLetterFrom+"h").value = temp;
+
+                temp = document.querySelector("#"+firstLetterTo+"l").value;
+                document.querySelector("#"+firstLetterTo+"l").value = document.querySelector("#"+firstLetterFrom+"l").value;
+                document.querySelector("#"+firstLetterFrom+"l").value = temp;
+            } else {
+                temp = document.querySelector("#"+results[4]).value;
+                document.querySelector("#"+results[4]).value = document.querySelector("#"+results[3]).value;
+                document.querySelector("#"+results[3]).value = temp;
+            }
+            document.querySelector("#history-list").innerHTML += "<li>XCHG "+results[2]+", "+results[1]+"</li>";
+        }
     </script>
 </body>
 </html>
