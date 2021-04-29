@@ -27,14 +27,14 @@
                 <input type="text" name="dh" class="reg" id="dh" value="00" maxlength="2">
                 <input type="text" name="dl" class="reg" id="dl" value="00" maxlength="2">
 
-                <label for="sp">CS</label>
+                <!-- <label for="sp">CS</label>
                 <input type="text" name="cs" class="seg-reg" id="cs" value="0000" maxlength="4">
                 <label for="ss">SS</label>
                 <input type="text" name="ss" class="seg-reg" id="ss" value="0000" maxlength="4">
                 <label for="ds">DS</label>
                 <input type="text" name="ds" class="seg-reg" id="ds" value="0000" maxlength="4">
                 <label for="es">ES</label>
-                <input type="text" name="es" class="seg-reg" id="es" value="0000" maxlength="4">
+                <input type="text" name="es" class="seg-reg" id="es" value="0000" maxlength="4"> -->
 
                 <label for="sp">SP</label>
                 <input type="text" name="sp" class="seg-reg" id="sp" value="0000" maxlength="4">
@@ -44,6 +44,8 @@
                 <input type="text" name="si" class="seg-reg" id="si" value="0000" maxlength="4">
                 <label for="di">DI</label>
                 <input type="text" name="di" class="seg-reg" id="di" value="0000" maxlength="4">
+                <label for="disp">DISP</label>
+                <input type="text" name="disp" class="seg-reg" id="disp" value="0000" maxlength="4">
 
                 
                 <button onclick="hexvalidate()" id="operation-btn" enabled>Validate</button>
@@ -60,7 +62,7 @@
             <input type="radio" name="addr" id="" onclick="showComp('#regs-btns')">
             <label for="direct">bezpośrednie</label><br>          
 
-            <input type="radio" name="addr" id="">
+            <input type="radio" name="addr" id="" onclick="showComp('#indexing')">
             <label for="index">indeksowe</label><br>
 
             <input type="radio" name="addr" id="">
@@ -109,6 +111,36 @@
                 </div>
             </div>
             
+            <div id="mov-command">
+                <span>Skąd: <span id="from-reg"></span> </span> <br>
+                <span>Dokąd: <span id="to-reg"></span> </span>
+            </div>
+            <button onclick="mov()">MOV</button>
+            <button onclick="xchg()">XCHG</button>
+        </div>
+        <div id="indexing">
+            <span id="from-desc">Wybierz pierwszy rejestr: </span>
+            <div class="choose-regs">
+                <div class="choose-regs-one">
+                    <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
+                    <button id="from-bx" onclick="getValue('#from-bx')">BX</button>
+                    <button id="from-cx" onclick="getValue('#from-cx')">CX</button>
+                    <button id="from-dx" onclick="getValue('#from-dx')">DX</button>
+                    <button id="from-si" onclick="getValue('#from-si')">SI</button>
+                    <button id="from-di" onclick="getValue('#from-di')">DI</button>
+                </div>     
+            </div>
+            <span>Wybierz drugi rejestr: </span>
+            <div class="choose-regs">
+                <div class="choose-regs-one">
+                    <button id="to-ax" onclick="getValue('#to-ax')">AX</button>
+                    <button id="to-ax" onclick="getValue('#to-bx')">BX</button>
+                    <button id="to-ax" onclick="getValue('#to-cx')">CX</button>
+                    <button id="to-ax" onclick="getValue('#to-dx')">DX</button>
+                    <button id="from-si" onclick="getValue('#from-si')">SI</button>
+                    <button id="from-di" onclick="getValue('#from-di')">DI</button>
+                </div>
+            </div>
             <div id="mov-command">
                 <span>Skąd: <span id="from-reg"></span> </span> <br>
                 <span>Dokąd: <span id="to-reg"></span> </span>
