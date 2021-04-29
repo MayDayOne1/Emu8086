@@ -9,7 +9,13 @@ main {
     grid-template-columns: repeat(3, 30px);
 }
 
-main input {
+.seg-reg {
+    grid-column: 2 / 4;
+    grid-auto-flow: column;
+    justify-self: stretch;
+}
+
+.reg input {
     width: 25px;
     margin: 0 auto;
 }
@@ -32,6 +38,14 @@ header {
 #operation-btn {
     grid-column: 1 / 4; 
 }
+
+#addr-modes {
+    display: none;
+    text-align: left;
+    width: 200px;
+    margin: 20px auto;
+}
+
 
 #regs-btns {
     display: none;

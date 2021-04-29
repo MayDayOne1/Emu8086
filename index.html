@@ -26,6 +26,26 @@
                 <label for="dx">DX</label>
                 <input type="text" name="dh" class="reg" id="dh" value="00" maxlength="2">
                 <input type="text" name="dl" class="reg" id="dl" value="00" maxlength="2">
+
+                <label for="sp">CS</label>
+                <input type="text" name="cs" class="seg-reg" id="cs" value="0000" maxlength="4">
+                <label for="ss">SS</label>
+                <input type="text" name="ss" class="seg-reg" id="ss" value="0000" maxlength="4">
+                <label for="ds">DS</label>
+                <input type="text" name="ds" class="seg-reg" id="ds" value="0000" maxlength="4">
+                <label for="es">ES</label>
+                <input type="text" name="es" class="seg-reg" id="es" value="0000" maxlength="4">
+
+                <label for="sp">SP</label>
+                <input type="text" name="sp" class="seg-reg" id="sp" value="0000" maxlength="4">
+                <label for="ss">BP</label>
+                <input type="text" name="bp" class="seg-reg" id="bp" value="0000" maxlength="4">
+                <label for="si">SI</label>
+                <input type="text" name="si" class="seg-reg" id="si" value="0000" maxlength="4">
+                <label for="di">DI</label>
+                <input type="text" name="di" class="seg-reg" id="di" value="0000" maxlength="4">
+
+                
                 <button onclick="hexvalidate()" id="operation-btn" enabled>Validate</button>
             </div>
             <div id="history">
@@ -34,13 +54,23 @@
                 <button onclick="clearHistory()">Wyczyść historię</button>
             </div>
         </header>
-        <div id="ops">
-            Lista operacji:
-            <button class="op" onclick="showComp('#regs-btns')">MOV</button>
-            <button class="op" onclick="showComp('#regs-btns')">XCHG</button>
+        <div id="addr-modes">
+            <span>Wybierz tryb adresowania:</span><br>
+
+            <input type="radio" name="addr" id="" onclick="showComp('#regs-btns')">
+            <label for="direct">bezpośrednie</label><br>          
+
+            <input type="radio" name="addr" id="">
+            <label for="index">indeksowe</label><br>
+
+            <input type="radio" name="addr" id="">
+            <label for="base">bazowe</label><br>
+
+            <input type="radio" name="addr" id="">
+            <label for="index-base">indeksowo-bazowe</label>
         </div>
         <div id="regs-btns">
-            <span id="from-desc">Chcę przerzucić zawartość z rejestru: </span>
+            <span id="from-desc">Wybierz pierwszy rejestr: </span>
             <div class="choose-regs">
                 <div class="choose-regs-one">
                     <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
@@ -59,7 +89,7 @@
                     <button id="from-dl" onclick="getValue('#from-dl')">DL</button>
                 </div>
             </div>
-            <span>Do rejestru: </span>
+            <span>Wybierz drugi rejestr: </span>
             <div class="choose-regs">
                 <div class="choose-regs-one">
                     <button id="to-ax" onclick="getValue('#to-ax')">AX</button>
@@ -80,15 +110,15 @@
             </div>
             
             <div id="mov-command">
-                <span>Z rejestru: <span id="from-reg"></span> </span> <br>
-                <span>Do rejestru: <span id="to-reg"></span> </span>
+                <span>Skąd: <span id="from-reg"></span> </span> <br>
+                <span>Dokąd: <span id="to-reg"></span> </span>
             </div>
             <button onclick="mov()">MOV</button>
             <button onclick="xchg()">XCHG</button>
         </div>
     </main>
     <script>
-        document.querySelector("#ops").style.setProperty("display", "none");
+        document.querySelectorAll("#addr-modes").checked = false;
 
         // HEX VALIDATION
         function hexvalidate() {
@@ -103,7 +133,7 @@
                     // document.querySelector("#operation-btn").innerHTML="ok";
                     alert("Proszę wypełnić rejestry liczbami w systemie szesnastkowym - cyfry 0-9 i/lub znaki A-F");
                 } else {
-                    document.querySelector("#ops").style.setProperty("display", "block");
+                    document.querySelector("#addr-modes").style.setProperty("display", "block");
                 }         
             }
         }
