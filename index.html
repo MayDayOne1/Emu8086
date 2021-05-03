@@ -1,392 +1,664 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
     <title>Emulator Intel 8086</title>
-</head>
-<body>
+  </head>
+  <body>
     <main>
-        <header>
-            <div id="main-regs">
-                <span> </span>
-                <span>H</span>
-                <span>L</span>
-                <label for="ax">AX</label>
-                <input type="text" name="ah" class="reg" id="ah" value="00" maxlength="2">
-                <input type="text" name="al" class="reg" id="al" value="00" maxlength="2">
-                <label for="bx">BX</label>
-                <input type="text" name="bh" class="reg" id="bh" value="00" maxlength="2">
-                <input type="text" name="bl" class="reg" id="bl" value="00" maxlength="2">
-                <label for="cx">CX</label>
-                <input type="text" name="ch" class="reg" id="ch" value="00" maxlength="2">
-                <input type="text" name="cl" class="reg" id="cl" value="00" maxlength="2">
-                <label for="dx">DX</label>
-                <input type="text" name="dh" class="reg" id="dh" value="00" maxlength="2">
-                <input type="text" name="dl" class="reg" id="dl" value="00" maxlength="2">
+      <header>
+        <div id="main-regs">
+          <span> </span>
+          <span>H</span>
+          <span>L</span>
+          <label for="ax">AX</label>
+          <input
+            type="text"
+            name="ah"
+            class="reg"
+            id="ah"
+            value="00"
+            maxlength="2"
+          />
+          <input
+            type="text"
+            name="al"
+            class="reg"
+            id="al"
+            value="00"
+            maxlength="2"
+          />
+          <label for="bx">BX</label>
+          <input
+            type="text"
+            name="bh"
+            class="reg"
+            id="bh"
+            value="00"
+            maxlength="2"
+          />
+          <input
+            type="text"
+            name="bl"
+            class="reg"
+            id="bl"
+            value="00"
+            maxlength="2"
+          />
+          <label for="cx">CX</label>
+          <input
+            type="text"
+            name="ch"
+            class="reg"
+            id="ch"
+            value="00"
+            maxlength="2"
+          />
+          <input
+            type="text"
+            name="cl"
+            class="reg"
+            id="cl"
+            value="00"
+            maxlength="2"
+          />
+          <label for="dx">DX</label>
+          <input
+            type="text"
+            name="dh"
+            class="reg"
+            id="dh"
+            value="00"
+            maxlength="2"
+          />
+          <input
+            type="text"
+            name="dl"
+            class="reg"
+            id="dl"
+            value="00"
+            maxlength="2"
+          />
 
-                <!-- <label for="sp">CS</label>
-                <input type="text" name="cs" class="seg-reg" id="cs" value="0000" maxlength="4">
-                <label for="ss">SS</label>
-                <input type="text" name="ss" class="seg-reg" id="ss" value="0000" maxlength="4">
-                <label for="ds">DS</label>
-                <input type="text" name="ds" class="seg-reg" id="ds" value="0000" maxlength="4">
-                <label for="es">ES</label>
-                <input type="text" name="es" class="seg-reg" id="es" value="0000" maxlength="4"> -->
+          <label for="sp">SP</label>
+          <input
+            type="text"
+            name="sp"
+            class="seg-reg"
+            id="sp"
+            value="0000"
+            maxlength="4"
+          />
+          <label for="ss">BP</label>
+          <input
+            type="text"
+            name="bp"
+            class="seg-reg"
+            id="bp"
+            value="0000"
+            maxlength="4"
+          />
+          <label for="si">SI</label>
+          <input
+            type="text"
+            name="si"
+            class="seg-reg"
+            id="si"
+            value="0000"
+            maxlength="4"
+          />
+          <label for="di">DI</label>
+          <input
+            type="text"
+            name="di"
+            class="seg-reg"
+            id="di"
+            value="0000"
+            maxlength="4"
+          />
+          <label for="disp">DISP</label>
+          <input
+            type="text"
+            name="disp"
+            class="seg-reg"
+            id="disp"
+            value="0000"
+            maxlength="4"
+          />
 
-                <label for="sp">SP</label>
-                <input type="text" name="sp" class="seg-reg" id="sp" value="0000" maxlength="4">
-                <label for="ss">BP</label>
-                <input type="text" name="bp" class="seg-reg" id="bp" value="0000" maxlength="4">
-                <label for="si">SI</label>
-                <input type="text" name="si" class="seg-reg" id="si" value="0000" maxlength="4">
-                <label for="di">DI</label>
-                <input type="text" name="di" class="seg-reg" id="di" value="0000" maxlength="4">
-                <label for="disp">DISP</label>
-                <input type="text" name="disp" class="seg-reg" id="disp" value="0000" maxlength="4">
-
-                
-                <button onclick="hexvalidate()" id="operation-btn" enabled>Validate</button>
-            </div>
-            <div id="history">
-                <h3>Historia operacji</h3>
-                <ul id="history-list"></ul>
-                <button onclick="clearHistory()">Wyczyść historię</button>
-            </div>
-        </header>
-        <div id="addr-modes">
-            <span>Wybierz tryb adresowania:</span><br>
-
-            <input type="radio" name="addr" class="addrMode" value="direct" onclick="showComp('#regs-btns')">
-            <label for="direct">bezpośrednie</label><br>          
-
-            <input type="radio" name="addr" class="addrMode" value="index" onclick="showComp('#indexing')">
-            <label for="index">indeksowe</label><br>
-
-            <input type="radio" name="addr" class="addrMode" value="base" onclick="showComp('#base')">
-            <label for="base">bazowe</label><br>
-
-            <input type="radio" name="addr" class="addrMode" value="index-base" onclick="showComp('#index-base')">
-            <label for="index-base">indeksowo-bazowe</label>
+          <button onclick="hexvalidate()" id="operation-btn" enabled>
+            Validate
+          </button>
         </div>
-        <div id="regs-btns">
-            <span id="from-desc">Wybierz pierwszy rejestr: </span>
-            <div class="choose-regs">
-                <div class="choose-regs-one">
-                    <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
-                    <button id="from-bx" onclick="getValue('#from-bx')">BX</button>
-                    <button id="from-cx" onclick="getValue('#from-cx')">CX</button>
-                    <button id="from-dx" onclick="getValue('#from-dx')">DX</button>
-                </div>
-                <div class="choose-regs-two">
-                    <button id="from-ah" onclick="getValue('#from-ah')">AH</button>
-                    <button id="from-al" onclick="getValue('#from-al')">AL</button>
-                    <button id="from-bh" onclick="getValue('#from-bh')">BH</button>
-                    <button id="from-bl" onclick="getValue('#from-bl')">BL</button>
-                    <button id="from-ch" onclick="getValue('#from-ch')">CH</button>
-                    <button id="from-cl" onclick="getValue('#from-cl')">CL</button>
-                    <button id="from-dh" onclick="getValue('#from-dh')">DH</button>
-                    <button id="from-dl" onclick="getValue('#from-dl')">DL</button>
-                </div>
-            </div>
-            <span>Wybierz drugi rejestr: </span>
-            <div class="choose-regs">
-                <div class="choose-regs-one">
-                    <button id="to-ax" onclick="getValue('#to-ax')">AX</button>
-                    <button id="to-ax" onclick="getValue('#to-bx')">BX</button>
-                    <button id="to-ax" onclick="getValue('#to-cx')">CX</button>
-                    <button id="to-ax" onclick="getValue('#to-dx')">DX</button>
-                </div>
-                <div class="choose-regs-two">
-                    <button id="to-ah" onclick="getValue('#to-ah')">AH</button>
-                    <button id="to-al" onclick="getValue('#to-al')">AL</button>
-                    <button id="to-bh" onclick="getValue('#to-bh')">BH</button>
-                    <button id="to-bl" onclick="getValue('#to-bl')">BL</button>
-                    <button id="to-ch" onclick="getValue('#to-ch')">CH</button>
-                    <button id="to-cl" onclick="getValue('#to-cl')">CL</button>
-                    <button id="to-dh" onclick="getValue('#to-dh')">DH</button>
-                    <button id="to-dl" onclick="getValue('#to-dl')">DL</button>
-                </div>
-            </div>
+        <div id="history">
+          <h3>Historia operacji</h3>
+          <ul id="history-list"></ul>
+          <button onclick="clearHistory()">Wyczyść historię</button>
+        </div>
+      </header>
+      <div id="addr-modes">
+        <span>Wybierz tryb adresowania:</span><br />
+
+        <input
+          type="radio"
+          name="addr"
+          class="addrMode"
+          value="direct"
+          onclick="showComp('#direct')"
+        />
+        <label for="direct">bezpośrednie</label><br />
+
+        <input
+          type="radio"
+          name="addr"
+          class="addrMode"
+          value="index"
+          onclick="showComp('#indexing')"
+        />
+        <label for="index">indeksowe</label><br />
+
+        <input
+          type="radio"
+          name="addr"
+          class="addrMode"
+          value="base"
+          onclick="showComp('#base')"
+        />
+        <label for="base">bazowe</label><br />
+
+        <input
+          type="radio"
+          name="addr"
+          class="addrMode"
+          value="index-base"
+          onclick="showComp('#index-base')"
+        />
+        <label for="index-base">indeksowo-bazowe</label>
+      </div>
+      <div id="direct">
+        <span id="from-desc">Wybierz pierwszy rejestr: </span>
+        <div class="choose-regs">
+          <div class="choose-regs-one">
+            <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
+            <button id="from-bx" onclick="getValue('#from-bx')">BX</button>
+            <button id="from-cx" onclick="getValue('#from-cx')">CX</button>
+            <button id="from-dx" onclick="getValue('#from-dx')">DX</button>
+          </div>
+          <div class="choose-regs-two">
+            <button id="from-ah" onclick="getValue('#from-ah')">AH</button>
+            <button id="from-al" onclick="getValue('#from-al')">AL</button>
+            <button id="from-bh" onclick="getValue('#from-bh')">BH</button>
+            <button id="from-bl" onclick="getValue('#from-bl')">BL</button>
+            <button id="from-ch" onclick="getValue('#from-ch')">CH</button>
+            <button id="from-cl" onclick="getValue('#from-cl')">CL</button>
+            <button id="from-dh" onclick="getValue('#from-dh')">DH</button>
+            <button id="from-dl" onclick="getValue('#from-dl')">DL</button>
+          </div>
+        </div>
+        <span>Wybierz drugi rejestr: </span>
+        <div class="choose-regs">
+          <div class="choose-regs-one">
+            <button id="to-ax" onclick="getValue('#to-ax')">AX</button>
+            <button id="to-ax" onclick="getValue('#to-bx')">BX</button>
+            <button id="to-ax" onclick="getValue('#to-cx')">CX</button>
+            <button id="to-ax" onclick="getValue('#to-dx')">DX</button>
+          </div>
+          <div class="choose-regs-two">
+            <button id="to-ah" onclick="getValue('#to-ah')">AH</button>
+            <button id="to-al" onclick="getValue('#to-al')">AL</button>
+            <button id="to-bh" onclick="getValue('#to-bh')">BH</button>
+            <button id="to-bl" onclick="getValue('#to-bl')">BL</button>
+            <button id="to-ch" onclick="getValue('#to-ch')">CH</button>
+            <button id="to-cl" onclick="getValue('#to-cl')">CL</button>
+            <button id="to-dh" onclick="getValue('#to-dh')">DH</button>
+            <button id="to-dl" onclick="getValue('#to-dl')">DL</button>
+          </div>
+        </div>
+        <div class="order-btns">
             <button onclick="mov()">MOV</button>
             <button onclick="xchg()">XCHG</button>
         </div>
-        <div id="indexing">
-            <input type="radio" name="reg-dir" value="mem2reg">
-            <label for="mem2reg">Z pamięci do rejestru</label>
-            <input type="radio" name="reg-dir" value="reg2mem">
-            <label for="reg2mem">Z rejestru do pamięci</label><br>
-            <span id="from-desc">Wybierz rejestr ogólnego przeznaczenia: </span>
-            <div class="choose-regs">
-                <div class="choose-regs-one">
-                    <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
-                    <button id="from-bx" onclick="getValue('#from-bx')">BX</button>
-                    <button id="from-cx" onclick="getValue('#from-cx')">CX</button>
-                    <button id="from-dx" onclick="getValue('#from-dx')">DX</button>
-                </div>     
-            </div>
-            <span>Wybierz rejestr indeksowy: </span>
-            <div class="choose-regs">
-                <div class="choose-regs-one">
-                    <button id="to-si" onclick="getValue('#to-si')">SI</button>
-                    <button id="to-di" onclick="getValue('#to-di')">DI</button>
-                </div>
-            </div>
-            <label for="disp">DISP</label>
-            <input type="checkbox" name="disp" id="disp-check">
-            <div>
-                <button onclick="mov()">MOV</button>
-                <button onclick="xchg()">XCHG</button>
-            </div>
+      </div>
+      <div id="indexing">
+        <input type="radio" name="reg-dir" value="mem2reg" />
+        <label for="mem2reg">Z pamięci do rejestru</label>
+        <input type="radio" name="reg-dir" value="reg2mem" />
+        <label for="reg2mem">Z rejestru do pamięci</label><br />
+        <span id="from-desc">Wybierz rejestr ogólnego przeznaczenia: </span>
+        <div class="choose-regs">
+          <div class="choose-regs-one">
+            <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
+            <button id="from-bx" onclick="getValue('#from-bx')">BX</button>
+            <button id="from-cx" onclick="getValue('#from-cx')">CX</button>
+            <button id="from-dx" onclick="getValue('#from-dx')">DX</button>
+          </div>
         </div>
-        <div id="base">
-            <input type="radio" name="reg-dir" value="mem2reg">
-            <label for="mem2reg">Z pamięci do rejestru</label>
-            <input type="radio" name="reg-dir" value="reg2mem">
-            <label for="reg2mem">Z rejestru do pamięci</label><br>
-            <span id="from-desc">Wybierz rejestr ogólnego przeznaczenia: </span>
-            <div class="choose-regs">
-                <div class="choose-regs-one">
-                    <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
-                    <button id="from-bx" onclick="getValue('#from-bx')">BX</button>
-                    <button id="from-cx" onclick="getValue('#from-cx')">CX</button>
-                    <button id="from-dx" onclick="getValue('#from-dx')">DX</button>
-                </div>     
-            </div>
-            <span>Wybierz rejestr bazowy: </span>
-            <div class="choose-regs">
-                <div class="choose-regs-one">
-                    <button id="to-bx" onclick="getValue('#to-bx')">BX</button>
-                    <button id="to-bp" onclick="getValue('#to-bp')">BP</button>
-                </div>
-            </div>
-            <label for="disp">DISP</label>
-            <input type="checkbox" name="disp" id="disp-check">
-            <div>
-                <button onclick="mov()">MOV</button>
-                <button onclick="xchg()">XCHG</button>
-            </div>
+        <span>Wybierz rejestr indeksowy: </span>
+        <div class="choose-regs">
+          <div class="choose-regs-one">
+            <button id="to-si" onclick="getValue('#to-si')">SI</button>
+            <button id="to-di" onclick="getValue('#to-di')">DI</button>
+          </div>
         </div>
-        <div id="index-base">
-            <input type="radio" name="reg-dir" value="mem2reg">
-            <label for="mem2reg">Z pamięci do rejestru</label>
-            <input type="radio" name="reg-dir" value="reg2mem">
-            <label for="reg2mem">Z rejestru do pamięci</label><br>
-            <span id="from-desc">Wybierz rejestr ogólnego przeznaczenia: </span>
-            <div class="choose-regs">
-                <div class="choose-regs-one">
-                    <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
-                    <button id="from-bx" onclick="getValue('#from-bx')">BX</button>
-                    <button id="from-cx" onclick="getValue('#from-cx')">CX</button>
-                    <button id="from-dx" onclick="getValue('#from-dx')">DX</button>
-                </div>     
-            </div>
-            <span>Wybierz rejestr bazowy i/lub indeksowy: </span>
-            <div class="choose-regs">
-                <div class="choose-regs-one">
-                    <button id="to-bx" onclick="getValue('#to-bx')">BX</button>
-                    <button id="to-bp" onclick="getValue('#to-bp')">BP</button>
-                    <button id="to-si" onclick="getValue('#to-si')">SI</button>
-                    <button id="to-di" onclick="getValue('#to-di')">DI</button>
-                </div>
-            </div>
-            <label for="disp">DISP</label>
-            <input type="checkbox" name="disp" id="disp-check">
-            <div>
-                <button onclick="mov()">MOV</button>
-                <button onclick="xchg()">XCHG</button>
-            </div>
+        <label for="disp">DISP</label>
+        <input type="checkbox" name="disp" id="disp-check" />
+        <div class="order-btns">
+            <button onclick="mov()">MOV</button>
+            <button onclick="xchg()">XCHG</button>
         </div>
-        <div id="mov-command">
-            <span>Skąd: <span id="from-reg"></span> </span> <br>
-            <span>Dokąd: <span id="to-reg"></span> </span>
+      </div>
+      <div id="base">
+        <input type="radio" name="reg-dir" value="mem2reg" />
+        <label for="mem2reg">Z pamięci do rejestru</label>
+        <input type="radio" name="reg-dir" value="reg2mem" />
+        <label for="reg2mem">Z rejestru do pamięci</label><br />
+        <span id="from-desc">Wybierz rejestr ogólnego przeznaczenia: </span>
+        <div class="choose-regs">
+          <div class="choose-regs-one">
+            <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
+            <button id="from-bx" onclick="getValue('#from-bx')">BX</button>
+            <button id="from-cx" onclick="getValue('#from-cx')">CX</button>
+            <button id="from-dx" onclick="getValue('#from-dx')">DX</button>
+          </div>
         </div>
+        <span>Wybierz rejestr bazowy: </span>
+        <div class="choose-regs">
+          <div class="choose-regs-one">
+            <button id="to-bx" onclick="getValue('#to-bx')">BX</button>
+            <button id="to-bp" onclick="getValue('#to-bp')">BP</button>
+          </div>
+        </div>
+        <label for="disp">DISP</label>
+        <input type="checkbox" name="disp" id="disp-check" />
+        <div class="order-btns">
+            <button onclick="mov()">MOV</button>
+            <button onclick="xchg()">XCHG</button>
+        </div>
+      </div>
+      <div id="index-base">
+        <input type="radio" name="reg-dir" value="mem2reg" />
+        <label for="mem2reg">Z pamięci do rejestru</label>
+        <input type="radio" name="reg-dir" value="reg2mem" />
+        <label for="reg2mem">Z rejestru do pamięci</label><br />
+        <span id="from-desc">Wybierz rejestr ogólnego przeznaczenia: </span>
+        <div class="choose-regs">
+          <div class="choose-regs-one">
+            <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
+            <button id="from-bx" onclick="getValue('#from-bx')">BX</button>
+            <button id="from-cx" onclick="getValue('#from-cx')">CX</button>
+            <button id="from-dx" onclick="getValue('#from-dx')">DX</button>
+          </div>
+        </div>
+        <span>Wybierz rejestr bazowy i/lub indeksowy: </span>
+        <div class="choose-regs">
+          <div class="choose-regs-one">
+            <button id="to-bx" onclick="getValue('#to-bx')">BX</button>
+            <button id="to-bp" onclick="getValue('#to-bp')">BP</button>
+            <button id="to-si" onclick="getValue('#to-si')">SI</button>
+            <button id="to-di" onclick="getValue('#to-di')">DI</button>
+          </div>
+          <div class="choose-regs-one">
+            <button id="to-bx-si" onclick="getValueFrom2('#to+bx+si')">BX + SI</button>
+            <button id="to-bx-di" onclick="getValueFrom2('#to+bx+di')">BX + DI</button>
+            <button id="to-bp-si" onclick="getValueFrom2('#to+bp+si')">BP + SI</button>
+            <button id="to-bp-di" onclick="getValueFrom2('#to+bp+di')">BP + DI</button>
+          </div>
+        </div>
+        <label for="disp">DISP</label>
+        <input type="checkbox" name="disp" id="disp-check" />
+        <div class="order-btns">
+            <button onclick="mov()">MOV</button>
+            <button onclick="xchg()">XCHG</button>
+        </div>
+      </div>
+      <div id="mov-command">
+        <span>Skąd: <span id="from-reg"></span> </span> <br />
+        <span>Dokąd: <span id="to-reg"></span> </span>
+      </div>
     </main>
     <script>
-        document.querySelectorAll("#addr-modes").checked = false;
+      document.querySelectorAll("#addr-modes").checked = false;
 
-        // HEX VALIDATION
-        function hexvalidate() {
-            let formdata = document.querySelectorAll(".reg");
-            let regArr = Array.from(formdata);
-            // console.log(regArr[0].value);
+      // HEX VALIDATION
+      function hexvalidate() {
+        let formdata = document.querySelectorAll(".reg");
+        let regArr = Array.from(formdata);
 
-            let regExp = new RegExp(/^[0-9A-F]{1,2}$/i);
-            for(let i = 0; i < regArr.length; i++) {
-                if (!regExp.test(regArr[i].value)) {
-                    // console.log(regArr[i].value);
-                    // document.querySelector("#operation-btn").innerHTML="ok";
-                    alert("Proszę wypełnić rejestry liczbami w systemie szesnastkowym - cyfry 0-9 i/lub znaki A-F");
-                } else {
-                    document.querySelector("#addr-modes").style.setProperty("display", "block");
-                }         
-            }
+        let regExp = new RegExp(/^[0-9A-F]{1,2}$/i);
+        for (let i = 0; i < regArr.length; i++) {
+          if (!regExp.test(regArr[i].value)) {
+            alert(
+              "Proszę wypełnić rejestry liczbami w systemie szesnastkowym - cyfry 0-9 i/lub znaki A-F"
+            );
+          } else {
+            document
+              .querySelector("#addr-modes")
+              .style.setProperty("display", "block");
+          }
+        }
+      }
+
+      function clearHistory() {
+        document.querySelector("#history-list").innerHTML = "";
+      }
+
+      function showComp(id) {
+        document.querySelector(id).style.setProperty("display", "block");  
+      }
+      // GET VALUE OF A REGISTER
+      function getValue(id) {
+        let valueId = id.substring(id.length - 2, id.length);
+        let regValue = "";
+        // console.log("valueID "+valueId);
+
+        //IF REGISTER HAS AN X
+        if (valueId.charAt(1) === "x") {
+          let firstLetter = valueId.charAt(0);
+          let valueH = "";
+          let valueL = "";
+
+          if (id.substring(1, 5) === "from") {
+            valueL = getValue("#from-" + firstLetter + "l");
+            valueH = getValue("#from-" + firstLetter + "h");
+          } else {
+            valueL = getValue("#to-" + firstLetter + "l");
+            valueH = getValue("#to-" + firstLetter + "h");
+          }
+          regValue = valueH.concat(valueL);
+          // console.log(regValue);
+        } else {
+          regValue = document.querySelector("#" + valueId).value;
         }
 
-        function clearHistory() {
-            document.querySelector("#history-list").innerHTML = "";
+        // console.log(id.substring(1,5));
+        if (id.substring(1, 5) === "from") {
+          document.querySelector("#from-reg").innerHTML =
+            valueId.toUpperCase() + " - " + regValue;
+        } else {
+          document.querySelector("#to-reg").innerHTML =
+            valueId.toUpperCase() + " - " + regValue;
         }
+        // console.log(regValue);
 
-        function showComp(id) {
-            document.querySelector(id).style.setProperty("display", "block");
-        }
+        return regValue;
+      }
 
+      function getValueFrom2(id) {
+        let split = id.split("+");
+        // console.log(split);
+        let returnValue;
+        
+        let value1 = document.querySelector("#"+split[1]).value;
+        // console.log(value1);
+        let value2 = document.querySelector("#"+split[2]).value;
+        // console.log(value2);
+        returnValue = value1 +" + "+ value2;
+        // console.log(returnValue);
 
-        // GET VALUE OF A REGISTER
-        function getValue(id) {
-            let valueId = id.substring(id.length-2, id.length);
-            let regValue = "";
-            // console.log("valueID "+valueId);
+        // console.log(id.substring(1,5));
+        let valueId = id.substring(id.length-5, id.length);
+        document.querySelector("#to-reg").innerHTML = valueId.toUpperCase() + " - " + returnValue;
+        
+        return returnValue;
+      }
 
-            //IF REGISTER HAS AN X
-            if(valueId.charAt(1) === "x") {
-                let firstLetter = valueId.charAt(0);
-                let valueH = "";
-                let valueL = "";
+      // FETCH DATA FOR MOV AND XCHG
+      function fetchData() {
+        let from = document.querySelector("#from-reg").innerHTML;
+        // console.log("from.length: "+from.length);
+        // console.log("from: "+from);
 
-                if(id.substring(1,5) === "from") {
-                    valueL = getValue("#from-"+firstLetter+"l");
-                    valueH = getValue("#from-"+firstLetter+"h");
-                } else {
-                    valueL = getValue("#to-"+firstLetter+"l");
-                    valueH = getValue("#to-"+firstLetter+"h");
-                }
-                regValue = valueH.concat(valueL);
-                // console.log(regValue);
+        let split = from.split(" - ");
+        // console.log(split);
+
+        let fromValue = split[1];
+        let fromId = from.substring(0, 2);
+        let fromIdLower = fromId.toLowerCase();
+        // console.log(from);
+        // console.log(fromValue);
+        // console.log(fromId);
+        let to = document.querySelector("#to-reg").innerHTML;
+        let toValue = to.substring(to.length - 2, to.length);
+        let toId = to.substring(0, 2);
+        let toIdLower = toId.toLowerCase();
+
+        let results = [fromValue, fromId, toId, toIdLower, fromIdLower];
+
+        return results;
+      }
+
+      function fetchDataFrom2() {
+        let from = document.querySelector("#from-reg").innerHTML;
+        // console.log("from.length: "+from.length);
+        // console.log("from: "+from);
+
+        let split = from.split(" - ");
+        // console.log(split);
+
+        let fromValue = split[1];
+        let fromId = from.substring(0, 2);
+        let fromIdLower = fromId.toLowerCase();
+        // console.log(from);
+        // console.log(fromValue);
+        // console.log(fromId);
+        let to = document.querySelector("#to-reg").innerHTML;
+        let toValue = to.substring(to.length - 5, to.length);
+        let toId = to.substring(0, 5);
+        let toIdLower = toId.toLowerCase();
+
+        let results = [fromValue, fromId, toId, toIdLower, fromIdLower];
+
+        return results;
+      }
+
+      // MOV
+      function mov() {
+        let results = fetchData(),
+          valueL,
+          valueH;
+        let addrMode = document.querySelector('input[name="addr"]:checked')
+          .value;
+        // console.log(addrMode);
+
+        // for(let i = 0; i < results.length; i++) {
+        //     console.log(i+": "+results[i]);
+        // }
+
+        switch (addrMode) {
+          case "direct":
+            if (results[4].charAt(1) == "x") {
+              valueH = results[0].substring(0, 2);
+              valueL = results[0].substring(2);
+              // console.log(valueH);
+              // console.log(valueL);
+              let firstLetter = results[3].charAt(0);
+              // console.log(firstLetter);
+              document.querySelector("#" + firstLetter + "h").value = valueH;
+              document.querySelector("#" + firstLetter + "l").value = valueL;
             } else {
-                regValue = document.querySelector("#"+valueId).value;
+              document.querySelector("#" + results[3]).value = results[0];
             }
-
-            // console.log(id.substring(1,5));
-            if(id.substring(1,5) === "from") {
-                document.querySelector("#from-reg").innerHTML = valueId.toUpperCase()+" - "+regValue;
+            document.querySelector("#history-list").innerHTML +=
+              "<li>MOV " + results[2] + ", " + results[1] + "</li>";
+            break;
+          case "index":
+          case "base":
+            if (
+              document.querySelector('input[name="reg-dir"]:checked').value ===
+              "reg2mem"
+            ) {
+              if (document.querySelector("#disp-check").checked === true) {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>MOV [" +
+                  results[2] +
+                  " + DISP], " +
+                  results[1] +
+                  "</li>";
+              } else {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>MOV " + results[2] + ", " + results[1] + "</li>";
+              }
             } else {
-                document.querySelector("#to-reg").innerHTML = valueId.toUpperCase()+" - "+regValue;
+              if (document.querySelector("#disp-check").checked === true) {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>MOV " +
+                  results[1] +
+                  ", [" +
+                  results[2] +
+                  " + DISP]</li>";
+              } else {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>MOV " + results[1] + ", " + results[2] + "</li>";
+              }
             }
-            // console.log(regValue);
-
-            return regValue;
-        }
-
-        // FETCH DATA FOR MOV AND XCHG
-        function fetchData() {
-            let from = document.querySelector("#from-reg").innerHTML;
-            // console.log("from.length: "+from.length);
-            // console.log("from: "+from);
-
-            let split = from.split(" - ");
-            // console.log(split);
-
-            let fromValue = split[1];
-            let fromId = from.substring(0,2);
-            let fromIdLower = fromId.toLowerCase();
-            // console.log(from);
-            // console.log(fromValue);
-            // console.log(fromId);
-            let to = document.querySelector("#to-reg").innerHTML;
-            let toValue = to.substring(to.length-2, to.length);
-            let toId = to.substring(0,2);
-            let toIdLower = toId.toLowerCase();
-
-            let results = [fromValue, fromId, toId, toIdLower, fromIdLower];
-
-            return results;
-        }
-
-        // MOV
-        function mov() {
-            let results = fetchData(), valueL, valueH;
-            let addrMode = document.querySelector('input[name="addr"]:checked').value;
-            // console.log(addrMode);
-            
-            // for(let i = 0; i < results.length; i++) {
-            //     console.log(i+": "+results[i]);
-            // }
-
-            switch(addrMode) {
-                case "direct":
-                    if(results[4].charAt(1) == "x") {
-                        valueH = results[0].substring(0,2);
-                        valueL = results[0].substring(2);
-                        // console.log(valueH);
-                        // console.log(valueL);
-                        let firstLetter = results[3].charAt(0);
-                        // console.log(firstLetter);
-                        document.querySelector("#"+firstLetter+"h").value = valueH;
-                        document.querySelector("#"+firstLetter+"l").value = valueL;
-                    } else {
-                        document.querySelector("#"+results[3]).value = results[0];
-                    }
-                    document.querySelector("#history-list").innerHTML += "<li>MOV "+results[2]+", "+results[1]+"</li>";
-                    break;
-                case "index":
-                case "base":
-                    if(document.querySelector('input[name="reg-dir"]:checked').value==="reg2mem") {
-                        // console.log(document.querySelector('input[name="reg-dir"]:checked').value);
-                        if(document.querySelector("#disp-check").checked === true) { 
-                            document.querySelector("#history-list").innerHTML += "<li>MOV ["+results[2]+" + DISP], "+results[1]+"</li>";
-                        } else {
-                            document.querySelector("#history-list").innerHTML += "<li>MOV "+results[2]+", "+results[1]+"</li>"; 
-                        }
-                    } else {
-                        if(document.querySelector("#disp-check").checked === true) { 
-                            document.querySelector("#history-list").innerHTML += "<li>MOV "+results[1]+", ["+results[2]+" + DISP]</li>";
-                        } else {
-                            document.querySelector("#history-list").innerHTML += "<li>MOV "+results[1]+", "+results[2]+"</li>"; 
-                        }
-                    }
-                    break;
+            break;
+            case "index-base":
+                results = fetchDataFrom2();
+                // for(let i = 0; i < results.length; i++) {
+                //     console.log(i+": "+results[i]);
+                // }
+                if (
+              document.querySelector('input[name="reg-dir"]:checked').value ===
+              "reg2mem"
+            ) {
+              if (document.querySelector("#disp-check").checked === true) {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>MOV [" +
+                  results[2] +
+                  " + DISP], " +
+                  results[1] +
+                  "</li>";
+              } else {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>MOV " + results[2] + ", " + results[1] + "</li>";
+              }
+            } else {
+              if (document.querySelector("#disp-check").checked === true) {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>MOV " +
+                  results[1] +
+                  ", [" +
+                  results[2] +
+                  " + DISP]</li>";
+              } else {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>MOV " + results[1] + ", " + results[2] + "</li>";
+              }
             }
+            break;
         }
-        // XCHG
-        function xchg() {
-            let results = fetchData();
-            let temp = "";
-            let addrMode = document.querySelector('input[name="addr"]:checked').value;
+      }
+      // XCHG
+      function xchg() {
+        let results = fetchData();
+        let temp = "";
+        let addrMode = document.querySelector('input[name="addr"]:checked')
+          .value;
 
-            switch(addrMode) {
-                case "direct":
-                    if(results[4].charAt(1) == "x") {
-                        let firstLetterTo = results[3].charAt(0);
-                        let firstLetterFrom = results[4].charAt(0);
-                        // console.log(firstLetterFrom);
-                        temp = document.querySelector("#"+firstLetterTo+"h").value;
-                        document.querySelector("#"+firstLetterTo+"h").value = document.querySelector("#"+firstLetterFrom+"h").value;
-                        document.querySelector("#"+firstLetterFrom+"h").value = temp;
+        switch (addrMode) {
+          case "direct":
+            if (results[4].charAt(1) == "x") {
+              let firstLetterTo = results[3].charAt(0);
+              let firstLetterFrom = results[4].charAt(0);
+              // console.log(firstLetterFrom);
+              temp = document.querySelector("#" + firstLetterTo + "h").value;
+              document.querySelector(
+                "#" + firstLetterTo + "h"
+              ).value = document.querySelector(
+                "#" + firstLetterFrom + "h"
+              ).value;
+              document.querySelector("#" + firstLetterFrom + "h").value = temp;
 
-                        temp = document.querySelector("#"+firstLetterTo+"l").value;
-                        document.querySelector("#"+firstLetterTo+"l").value = document.querySelector("#"+firstLetterFrom+"l").value;
-                        document.querySelector("#"+firstLetterFrom+"l").value = temp;
-                    } else {
-                        temp = document.querySelector("#"+results[4]).value;
-                        document.querySelector("#"+results[4]).value = document.querySelector("#"+results[3]).value;
-                        document.querySelector("#"+results[3]).value = temp;
-                    }
-                    document.querySelector("#history-list").innerHTML += "<li>XCHG "+results[2]+", "+results[1]+"</li>";
-                    break;
-                case "index":
-                case "base":
-                    if(document.querySelector('input[name="reg-dir"]:checked').value==="reg2mem") {
-                        // console.log(document.querySelector('input[name="reg-dir"]:checked').value);
-                        if(document.querySelector("#disp-check").checked === true) { 
-                            document.querySelector("#history-list").innerHTML += "<li>XCHG ["+results[2]+" + DISP], "+results[1]+"</li>";
-                        } else {
-                            document.querySelector("#history-list").innerHTML += "<li>XCHG "+results[2]+", "+results[1]+"</li>"; 
-                        }
-                    } else {
-                        if(document.querySelector("#disp-check").checked === true) { 
-                            document.querySelector("#history-list").innerHTML += "<li>XCHG "+results[1]+", ["+results[2]+" + DISP]</li>";
-                        } else {
-                            document.querySelector("#history-list").innerHTML += "<li>XCHG "+results[1]+", "+results[2]+"</li>"; 
-                        }
-                    }
-                    break;
-                case "default":
-                    console.log("Address mode error!");
-            } 
+              temp = document.querySelector("#" + firstLetterTo + "l").value;
+              document.querySelector(
+                "#" + firstLetterTo + "l"
+              ).value = document.querySelector(
+                "#" + firstLetterFrom + "l"
+              ).value;
+              document.querySelector("#" + firstLetterFrom + "l").value = temp;
+            } else {
+              temp = document.querySelector("#" + results[4]).value;
+              document.querySelector(
+                "#" + results[4]
+              ).value = document.querySelector("#" + results[3]).value;
+              document.querySelector("#" + results[3]).value = temp;
+            }
+            document.querySelector("#history-list").innerHTML +=
+              "<li>XCHG " + results[2] + ", " + results[1] + "</li>";
+            break;
+          case "index":
+          case "base":
+            if (
+              document.querySelector('input[name="reg-dir"]:checked').value ===
+              "reg2mem"
+            ) {
+              if (document.querySelector("#disp-check").checked === true) {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>XCHG [" +
+                  results[2] +
+                  " + DISP], " +
+                  results[1] +
+                  "</li>";
+              } else {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>XCHG " + results[2] + ", " + results[1] + "</li>";
+              }
+            } else {
+              if (document.querySelector("#disp-check").checked === true) {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>XCHG " +
+                  results[1] +
+                  ", [" +
+                  results[2] +
+                  " + DISP]</li>";
+              } else {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>XCHG " + results[1] + ", " + results[2] + "</li>";
+              }
+            }
+            break;
+        
+            case "index-base":
+                results = fetchDataFrom2();
+                // for(let i = 0; i < results.length; i++) {
+                //     console.log(i+": "+results[i]);
+                // }
+                if (
+              document.querySelector('input[name="reg-dir"]:checked').value ===
+              "reg2mem"
+            ) {
+              if (document.querySelector("#disp-check").checked === true) {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>XCHG [" +
+                  results[2] +
+                  " + DISP], " +
+                  results[1] +
+                  "</li>";
+              } else {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>XCHG " + results[2] + ", " + results[1] + "</li>";
+              }
+            } else {
+              if (document.querySelector("#disp-check").checked === true) {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>XCHG " +
+                  results[1] +
+                  ", [" +
+                  results[2] +
+                  " + DISP]</li>";
+              } else {
+                document.querySelector("#history-list").innerHTML +=
+                  "<li>XCHG " + results[1] + ", " + results[2] + "</li>";
+              }
+            }
+            break;
+          case "default":
+            console.log("Address mode error!");
         }
+      }
     </script>
-</body>
+  </body>
 </html>

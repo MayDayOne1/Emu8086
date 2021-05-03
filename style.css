@@ -47,7 +47,7 @@ header {
 }
 
 
-#regs-btns, #indexing, #base, #index-base {
+#direct, #indexing, #base, #index-base {
     display: none;
 }
 
