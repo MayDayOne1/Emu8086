@@ -65,10 +65,10 @@
             <input type="radio" name="addr" class="addrMode" value="index" onclick="showComp('#indexing')">
             <label for="index">indeksowe</label><br>
 
-            <input type="radio" name="addr" class="addrMode" value="base">
+            <input type="radio" name="addr" class="addrMode" value="base" onclick="showComp('#base')">
             <label for="base">bazowe</label><br>
 
-            <input type="radio" name="addr" class="addrMode" value="index-base">
+            <input type="radio" name="addr" class="addrMode" value="index-base" onclick="showComp('#index-base')">
             <label for="index-base">indeksowo-bazowe</label>
         </div>
         <div id="regs-btns">
@@ -130,6 +130,64 @@
             <span>Wybierz rejestr indeksowy: </span>
             <div class="choose-regs">
                 <div class="choose-regs-one">
+                    <button id="to-si" onclick="getValue('#to-si')">SI</button>
+                    <button id="to-di" onclick="getValue('#to-di')">DI</button>
+                </div>
+            </div>
+            <label for="disp">DISP</label>
+            <input type="checkbox" name="disp" id="disp-check">
+            <div>
+                <button onclick="mov()">MOV</button>
+                <button onclick="xchg()">XCHG</button>
+            </div>
+        </div>
+        <div id="base">
+            <input type="radio" name="reg-dir" value="mem2reg">
+            <label for="mem2reg">Z pamięci do rejestru</label>
+            <input type="radio" name="reg-dir" value="reg2mem">
+            <label for="reg2mem">Z rejestru do pamięci</label><br>
+            <span id="from-desc">Wybierz rejestr ogólnego przeznaczenia: </span>
+            <div class="choose-regs">
+                <div class="choose-regs-one">
+                    <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
+                    <button id="from-bx" onclick="getValue('#from-bx')">BX</button>
+                    <button id="from-cx" onclick="getValue('#from-cx')">CX</button>
+                    <button id="from-dx" onclick="getValue('#from-dx')">DX</button>
+                </div>     
+            </div>
+            <span>Wybierz rejestr bazowy: </span>
+            <div class="choose-regs">
+                <div class="choose-regs-one">
+                    <button id="to-bx" onclick="getValue('#to-bx')">BX</button>
+                    <button id="to-bp" onclick="getValue('#to-bp')">BP</button>
+                </div>
+            </div>
+            <label for="disp">DISP</label>
+            <input type="checkbox" name="disp" id="disp-check">
+            <div>
+                <button onclick="mov()">MOV</button>
+                <button onclick="xchg()">XCHG</button>
+            </div>
+        </div>
+        <div id="index-base">
+            <input type="radio" name="reg-dir" value="mem2reg">
+            <label for="mem2reg">Z pamięci do rejestru</label>
+            <input type="radio" name="reg-dir" value="reg2mem">
+            <label for="reg2mem">Z rejestru do pamięci</label><br>
+            <span id="from-desc">Wybierz rejestr ogólnego przeznaczenia: </span>
+            <div class="choose-regs">
+                <div class="choose-regs-one">
+                    <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
+                    <button id="from-bx" onclick="getValue('#from-bx')">BX</button>
+                    <button id="from-cx" onclick="getValue('#from-cx')">CX</button>
+                    <button id="from-dx" onclick="getValue('#from-dx')">DX</button>
+                </div>     
+            </div>
+            <span>Wybierz rejestr bazowy i/lub indeksowy: </span>
+            <div class="choose-regs">
+                <div class="choose-regs-one">
+                    <button id="to-bx" onclick="getValue('#to-bx')">BX</button>
+                    <button id="to-bp" onclick="getValue('#to-bp')">BP</button>
                     <button id="to-si" onclick="getValue('#to-si')">SI</button>
                     <button id="to-di" onclick="getValue('#to-di')">DI</button>
                 </div>
@@ -239,9 +297,7 @@
 
         // MOV
         function mov() {
-            let results = fetchData();
-            let valueL = "";
-            let valueH = "";
+            let results = fetchData(), valueL, valueH;
             let addrMode = document.querySelector('input[name="addr"]:checked').value;
             // console.log(addrMode);
             
@@ -266,8 +322,9 @@
                     document.querySelector("#history-list").innerHTML += "<li>MOV "+results[2]+", "+results[1]+"</li>";
                     break;
                 case "index":
+                case "base":
                     if(document.querySelector('input[name="reg-dir"]:checked').value==="reg2mem") {
-                        console.log(document.querySelector('input[name="reg-dir"]:checked').value);
+                        // console.log(document.querySelector('input[name="reg-dir"]:checked').value);
                         if(document.querySelector("#disp-check").checked === true) { 
                             document.querySelector("#history-list").innerHTML += "<li>MOV ["+results[2]+" + DISP], "+results[1]+"</li>";
                         } else {
@@ -283,29 +340,52 @@
                     break;
             }
         }
-
         // XCHG
         function xchg() {
             let results = fetchData();
             let temp = "";
+            let addrMode = document.querySelector('input[name="addr"]:checked').value;
 
-            if(results[4].charAt(1) == "x") {
-                let firstLetterTo = results[3].charAt(0);
-                let firstLetterFrom = results[4].charAt(0);
-                // console.log(firstLetterFrom);
-                temp = document.querySelector("#"+firstLetterTo+"h").value;
-                document.querySelector("#"+firstLetterTo+"h").value = document.querySelector("#"+firstLetterFrom+"h").value;
-                document.querySelector("#"+firstLetterFrom+"h").value = temp;
+            switch(addrMode) {
+                case "direct":
+                    if(results[4].charAt(1) == "x") {
+                        let firstLetterTo = results[3].charAt(0);
+                        let firstLetterFrom = results[4].charAt(0);
+                        // console.log(firstLetterFrom);
+                        temp = document.querySelector("#"+firstLetterTo+"h").value;
+                        document.querySelector("#"+firstLetterTo+"h").value = document.querySelector("#"+firstLetterFrom+"h").value;
+                        document.querySelector("#"+firstLetterFrom+"h").value = temp;
 
-                temp = document.querySelector("#"+firstLetterTo+"l").value;
-                document.querySelector("#"+firstLetterTo+"l").value = document.querySelector("#"+firstLetterFrom+"l").value;
-                document.querySelector("#"+firstLetterFrom+"l").value = temp;
-            } else {
-                temp = document.querySelector("#"+results[4]).value;
-                document.querySelector("#"+results[4]).value = document.querySelector("#"+results[3]).value;
-                document.querySelector("#"+results[3]).value = temp;
-            }
-            document.querySelector("#history-list").innerHTML += "<li>XCHG "+results[2]+", "+results[1]+"</li>";
+                        temp = document.querySelector("#"+firstLetterTo+"l").value;
+                        document.querySelector("#"+firstLetterTo+"l").value = document.querySelector("#"+firstLetterFrom+"l").value;
+                        document.querySelector("#"+firstLetterFrom+"l").value = temp;
+                    } else {
+                        temp = document.querySelector("#"+results[4]).value;
+                        document.querySelector("#"+results[4]).value = document.querySelector("#"+results[3]).value;
+                        document.querySelector("#"+results[3]).value = temp;
+                    }
+                    document.querySelector("#history-list").innerHTML += "<li>XCHG "+results[2]+", "+results[1]+"</li>";
+                    break;
+                case "index":
+                case "base":
+                    if(document.querySelector('input[name="reg-dir"]:checked').value==="reg2mem") {
+                        // console.log(document.querySelector('input[name="reg-dir"]:checked').value);
+                        if(document.querySelector("#disp-check").checked === true) { 
+                            document.querySelector("#history-list").innerHTML += "<li>XCHG ["+results[2]+" + DISP], "+results[1]+"</li>";
+                        } else {
+                            document.querySelector("#history-list").innerHTML += "<li>XCHG "+results[2]+", "+results[1]+"</li>"; 
+                        }
+                    } else {
+                        if(document.querySelector("#disp-check").checked === true) { 
+                            document.querySelector("#history-list").innerHTML += "<li>XCHG "+results[1]+", ["+results[2]+" + DISP]</li>";
+                        } else {
+                            document.querySelector("#history-list").innerHTML += "<li>XCHG "+results[1]+", "+results[2]+"</li>"; 
+                        }
+                    }
+                    break;
+                case "default":
+                    console.log("Address mode error!");
+            } 
         }
     </script>
 </body>
