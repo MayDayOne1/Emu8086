@@ -59,16 +59,16 @@
         <div id="addr-modes">
             <span>Wybierz tryb adresowania:</span><br>
 
-            <input type="radio" name="addr" id="" onclick="showComp('#regs-btns')">
+            <input type="radio" name="addr" class="addrMode" value="direct" onclick="showComp('#regs-btns')">
             <label for="direct">bezpośrednie</label><br>          
 
-            <input type="radio" name="addr" id="" onclick="showComp('#indexing')">
+            <input type="radio" name="addr" class="addrMode" value="index" onclick="showComp('#indexing')">
             <label for="index">indeksowe</label><br>
 
-            <input type="radio" name="addr" id="">
+            <input type="radio" name="addr" class="addrMode" value="base">
             <label for="base">bazowe</label><br>
 
-            <input type="radio" name="addr" id="">
+            <input type="radio" name="addr" class="addrMode" value="index-base">
             <label for="index-base">indeksowo-bazowe</label>
         </div>
         <div id="regs-btns">
@@ -114,9 +114,9 @@
             <button onclick="xchg()">XCHG</button>
         </div>
         <div id="indexing">
-            <input type="radio" name="reg-dir" id="mem2reg">
+            <input type="radio" name="reg-dir" value="mem2reg">
             <label for="mem2reg">Z pamięci do rejestru</label>
-            <input type="radio" name="reg-dir" id="reg2mem">
+            <input type="radio" name="reg-dir" value="reg2mem">
             <label for="reg2mem">Z rejestru do pamięci</label><br>
             <span id="from-desc">Wybierz rejestr ogólnego przeznaczenia: </span>
             <div class="choose-regs">
@@ -135,7 +135,7 @@
                 </div>
             </div>
             <label for="disp">DISP</label>
-            <input type="checkbox" name="disp" id="">
+            <input type="checkbox" name="disp" id="disp-check">
             <div>
                 <button onclick="mov()">MOV</button>
                 <button onclick="xchg()">XCHG</button>
@@ -242,24 +242,46 @@
             let results = fetchData();
             let valueL = "";
             let valueH = "";
+            let addrMode = document.querySelector('input[name="addr"]:checked').value;
+            // console.log(addrMode);
             
             // for(let i = 0; i < results.length; i++) {
             //     console.log(i+": "+results[i]);
             // }
 
-            if(results[4].charAt(1) == "x") {
-                valueH = results[0].substring(0,2);
-                valueL = results[0].substring(2);
-                // console.log(valueH);
-                // console.log(valueL);
-                let firstLetter = results[3].charAt(0);
-                // console.log(firstLetter);
-                document.querySelector("#"+firstLetter+"h").value = valueH;
-                document.querySelector("#"+firstLetter+"l").value = valueL;
-            } else {
-                document.querySelector("#"+results[3]).value = results[0];
+            switch(addrMode) {
+                case "direct":
+                    if(results[4].charAt(1) == "x") {
+                        valueH = results[0].substring(0,2);
+                        valueL = results[0].substring(2);
+                        // console.log(valueH);
+                        // console.log(valueL);
+                        let firstLetter = results[3].charAt(0);
+                        // console.log(firstLetter);
+                        document.querySelector("#"+firstLetter+"h").value = valueH;
+                        document.querySelector("#"+firstLetter+"l").value = valueL;
+                    } else {
+                        document.querySelector("#"+results[3]).value = results[0];
+                    }
+                    document.querySelector("#history-list").innerHTML += "<li>MOV "+results[2]+", "+results[1]+"</li>";
+                    break;
+                case "index":
+                    if(document.querySelector('input[name="reg-dir"]:checked').value==="reg2mem") {
+                        console.log(document.querySelector('input[name="reg-dir"]:checked').value);
+                        if(document.querySelector("#disp-check").checked === true) { 
+                            document.querySelector("#history-list").innerHTML += "<li>MOV ["+results[2]+" + DISP], "+results[1]+"</li>";
+                        } else {
+                            document.querySelector("#history-list").innerHTML += "<li>MOV "+results[2]+", "+results[1]+"</li>"; 
+                        }
+                    } else {
+                        if(document.querySelector("#disp-check").checked === true) { 
+                            document.querySelector("#history-list").innerHTML += "<li>MOV "+results[1]+", ["+results[2]+" + DISP]</li>";
+                        } else {
+                            document.querySelector("#history-list").innerHTML += "<li>MOV "+results[1]+", "+results[2]+"</li>"; 
+                        }
+                    }
+                    break;
             }
-            document.querySelector("#history-list").innerHTML += "<li>MOV "+results[2]+", "+results[1]+"</li>";
         }
 
         // XCHG
