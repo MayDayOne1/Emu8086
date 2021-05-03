@@ -110,43 +110,40 @@
                     <button id="to-dl" onclick="getValue('#to-dl')">DL</button>
                 </div>
             </div>
-            
-            <div id="mov-command">
-                <span>Skąd: <span id="from-reg"></span> </span> <br>
-                <span>Dokąd: <span id="to-reg"></span> </span>
-            </div>
             <button onclick="mov()">MOV</button>
             <button onclick="xchg()">XCHG</button>
         </div>
         <div id="indexing">
-            <span id="from-desc">Wybierz pierwszy rejestr: </span>
+            <input type="radio" name="reg-dir" id="mem2reg">
+            <label for="mem2reg">Z pamięci do rejestru</label>
+            <input type="radio" name="reg-dir" id="reg2mem">
+            <label for="reg2mem">Z rejestru do pamięci</label><br>
+            <span id="from-desc">Wybierz rejestr ogólnego przeznaczenia: </span>
             <div class="choose-regs">
                 <div class="choose-regs-one">
                     <button id="from-ax" onclick="getValue('#from-ax')">AX</button>
                     <button id="from-bx" onclick="getValue('#from-bx')">BX</button>
                     <button id="from-cx" onclick="getValue('#from-cx')">CX</button>
                     <button id="from-dx" onclick="getValue('#from-dx')">DX</button>
-                    <button id="from-si" onclick="getValue('#from-si')">SI</button>
-                    <button id="from-di" onclick="getValue('#from-di')">DI</button>
                 </div>     
             </div>
-            <span>Wybierz drugi rejestr: </span>
+            <span>Wybierz rejestr indeksowy: </span>
             <div class="choose-regs">
                 <div class="choose-regs-one">
-                    <button id="to-ax" onclick="getValue('#to-ax')">AX</button>
-                    <button id="to-ax" onclick="getValue('#to-bx')">BX</button>
-                    <button id="to-ax" onclick="getValue('#to-cx')">CX</button>
-                    <button id="to-ax" onclick="getValue('#to-dx')">DX</button>
-                    <button id="from-si" onclick="getValue('#from-si')">SI</button>
-                    <button id="from-di" onclick="getValue('#from-di')">DI</button>
+                    <button id="to-si" onclick="getValue('#to-si')">SI</button>
+                    <button id="to-di" onclick="getValue('#to-di')">DI</button>
                 </div>
             </div>
-            <div id="mov-command">
-                <span>Skąd: <span id="from-reg"></span> </span> <br>
-                <span>Dokąd: <span id="to-reg"></span> </span>
+            <label for="disp">DISP</label>
+            <input type="checkbox" name="disp" id="">
+            <div>
+                <button onclick="mov()">MOV</button>
+                <button onclick="xchg()">XCHG</button>
             </div>
-            <button onclick="mov()">MOV</button>
-            <button onclick="xchg()">XCHG</button>
+        </div>
+        <div id="mov-command">
+            <span>Skąd: <span id="from-reg"></span> </span> <br>
+            <span>Dokąd: <span id="to-reg"></span> </span>
         </div>
     </main>
     <script>
@@ -210,6 +207,7 @@
             } else {
                 document.querySelector("#to-reg").innerHTML = valueId.toUpperCase()+" - "+regValue;
             }
+            // console.log(regValue);
 
             return regValue;
         }
