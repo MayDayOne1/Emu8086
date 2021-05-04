@@ -181,7 +181,7 @@
         </div>
         <div id="stack-ops">
           <span>Wybierz rejestr:</span><br>
-          <select name="" id="">
+          <select id="choose-reg">
             <option value="ax">AX</option>
             <option value="ah">AH</option>
             <option value="al">AL</option>
@@ -199,8 +199,8 @@
             <option value="si">SI</option>
             <option value="di">DI</option>
           </select>
-          <button>PUSH</button>
-          <button>POP</button>
+          <button onclick="push()">PUSH</button>
+          <button onclick="pop()" id="pop-btn">POP</button>
         </div>
       </div>
       <div id="direct">
@@ -474,7 +474,7 @@
         let toId = to.substring(0, 5);
         let toIdLower = toId.toLowerCase();
 
-        let results = [fromValue, fromId, toId, toIdLower, fromIdLower];
+        let results = [fromValue, fromId, toId, toIdLower, fromIdLower, toValue];
 
         return results;
       }
@@ -484,8 +484,7 @@
         let results = fetchData(),
           valueL,
           valueH;
-        let addrMode = document.querySelector('input[name="addr"]:checked')
-          .value;
+        let addrMode = document.querySelector('input[name="addr"]:checked').value;
         // console.log(addrMode);
 
         // for(let i = 0; i < results.length; i++) {
@@ -537,6 +536,10 @@
               } else {
                 document.querySelector("#history-list").innerHTML +=
                   "<li>MOV " + results[1] + ", " + results[2] + "</li>";
+                  valueH = results[0].substring(0, 2);
+                  valueL = results[0].substring(2);
+                  let value = valueH + valueL;
+                  document.querySelector("#" + results[3]).value = value;
               }
             }
             break;
@@ -683,6 +686,47 @@
           case "default":
             console.log("Address mode error!");
         }
+      }
+
+      let regArray = new Array;
+      function push() {
+        let reg = document.querySelector("#choose-reg").value;
+        let upperReg = reg.toUpperCase();
+        regArray.push(upperReg);
+        // console.log(upperReg);
+        document.querySelector("#history-list").innerHTML += "<li class='stack-el'>PUSH " + upperReg + "</li>";
+        document.querySelector("#stack-list").innerHTML = "";
+        for(let i = regArray.length-1; i >= 0; i--) {
+          document.querySelector("#stack-list").innerHTML += "<li class='stack-list-el'>" + regArray[i] + "</li>";
+        }
+        let sp = document.querySelector("#sp").value;
+        // console.log(sp);
+        let spParsed = parseInt(sp, 16);
+        // console.log(spParsed);
+        spParsed += 2;
+        sp = spParsed.toString(16);
+        // console.log(sp);
+        let spUpper = sp.toUpperCase();
+        document.querySelector("#sp").value = spUpper;
+      }
+
+      function pop() {
+        document.querySelector("#history-list").innerHTML += "<li class='stack-el'>POP " + regArray[regArray.length-1] + "</li>";
+        regArray.pop();
+        document.querySelector("#stack-list").innerHTML = "";
+        for(let i = regArray.length-1; i >= 0; i--) {
+          document.querySelector("#stack-list").innerHTML += "<li class='stack-list-el'>" + regArray[i] + "</li>";
+        }
+
+        let sp = document.querySelector("#sp").value;
+        // console.log(sp);
+        let spParsed = parseInt(sp, 16);
+        // console.log(spParsed);
+        spParsed -= 2;
+        sp = spParsed.toString(16);
+        // console.log(sp);
+        let spUpper = sp.toUpperCase();
+        document.querySelector("#sp").value = spUpper;
       }
     </script>
   </body>

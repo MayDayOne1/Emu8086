@@ -31,7 +31,7 @@ header {
     width: 100%;
 }
 
-#history li {
+#history li, #stack-list li {
     list-style-type: none;
 }
 
