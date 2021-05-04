@@ -39,15 +39,16 @@ header {
     grid-column: 1 / 4; 
 }
 
-#addr-modes {
-    display: none;
-    text-align: left;
-    width: 200px;
+#main-ops {
     margin: 20px auto;
 }
 
+#addr-modes {
+    text-align: left;
+    width: 200px;
+}
 
-#direct, #indexing, #base, #index-base {
+#direct, #indexing, #base, #index-base, .main-ops {
     display: none;
 }
 

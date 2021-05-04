@@ -129,7 +129,7 @@
             maxlength="4"
           />
 
-          <button onclick="hexvalidate()" id="operation-btn" enabled>
+          <button onclick="hexvalidate()" id="operation-btn">
             Validate
           </button>
         </div>
@@ -138,45 +138,70 @@
           <ul id="history-list"></ul>
           <button onclick="clearHistory()">Wyczyść historię</button>
         </div>
+        <div id="stack">
+          <h3>Podgląd stosu</h3>
+          <ul id="stack-list"></ul>
+        </div>
       </header>
-      <div id="addr-modes">
-        <span>Wybierz tryb adresowania:</span><br />
-
-        <input
-          type="radio"
-          name="addr"
-          class="addrMode"
-          value="direct"
-          onclick="showComp('#direct')"
-        />
-        <label for="direct">bezpośrednie</label><br />
-
-        <input
-          type="radio"
-          name="addr"
-          class="addrMode"
-          value="index"
-          onclick="showComp('#indexing')"
-        />
-        <label for="index">indeksowe</label><br />
-
-        <input
-          type="radio"
-          name="addr"
-          class="addrMode"
-          value="base"
-          onclick="showComp('#base')"
-        />
-        <label for="base">bazowe</label><br />
-
-        <input
-          type="radio"
-          name="addr"
-          class="addrMode"
-          value="index-base"
-          onclick="showComp('#index-base')"
-        />
-        <label for="index-base">indeksowo-bazowe</label>
+      <div class="main-ops">
+        <div id="addr-modes">
+          <span>Wybierz tryb adresowania:</span><br />
+          <input
+            type="radio"
+            name="addr"
+            class="addrMode"
+            value="direct"
+            onclick="showComp('#direct')"
+          />
+          <label for="direct">bezpośrednie</label><br />
+          <input
+            type="radio"
+            name="addr"
+            class="addrMode"
+            value="index"
+            onclick="showComp('#indexing')"
+          />
+          <label for="index">indeksowe</label><br />
+          <input
+            type="radio"
+            name="addr"
+            class="addrMode"
+            value="base"
+            onclick="showComp('#base')"
+          />
+          <label for="base">bazowe</label><br />
+          <input
+            type="radio"
+            name="addr"
+            class="addrMode"
+            value="index-base"
+            onclick="showComp('#index-base')"
+          />
+          <label for="index-base">indeksowo-bazowe</label>
+        </div>
+        <div id="stack-ops">
+          <span>Wybierz rejestr:</span><br>
+          <select name="" id="">
+            <option value="ax">AX</option>
+            <option value="ah">AH</option>
+            <option value="al">AL</option>
+            <option value="bx">BX</option>
+            <option value="bh">BH</option>
+            <option value="bl">BL</option>
+            <option value="cx">CX</option>
+            <option value="ch">CH</option>
+            <option value="cl">CL</option>
+            <option value="dx">DX</option>
+            <option value="dh">DH</option>
+            <option value="dl">DL</option>
+            <option value="sp">SP</option>
+            <option value="bp">BP</option>
+            <option value="si">SI</option>
+            <option value="di">DI</option>
+          </select>
+          <button>PUSH</button>
+          <button>POP</button>
+        </div>
       </div>
       <div id="direct">
         <span id="from-desc">Wybierz pierwszy rejestr: </span>
@@ -335,8 +360,8 @@
             );
           } else {
             document
-              .querySelector("#addr-modes")
-              .style.setProperty("display", "block");
+              .querySelector(".main-ops")
+              .style.setProperty("display", "flex");
           }
         }
       }
