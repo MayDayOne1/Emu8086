@@ -711,7 +711,27 @@
       }
 
       function pop() {
-        document.querySelector("#history-list").innerHTML += "<li class='stack-el'>POP " + regArray[regArray.length-1] + "</li>";
+        let reg = document.querySelector("#choose-reg");
+        // console.log(reg.value);
+        document.querySelector("#history-list").innerHTML += "<li class='stack-el'>POP " + reg.value.toUpperCase()  + "</li>";
+        let regValue = getValue("#"+reg.value);
+        let pushVar = getValue("#"+regArray[0].toLowerCase());
+        // console.log(regValue);
+        
+        if (reg.value.charAt(1) == "x") {
+              valueH = pushVar.substring(0, 2);
+              valueL = pushVar.substring(2);
+              // console.log(valueH);
+              // console.log(valueL);
+              let firstLetter = reg.value.charAt(0);
+              // console.log(firstLetter);
+              document.querySelector("#" + firstLetter + "h").value = valueH;
+              // console.log(document.querySelector("#" + firstLetter + "h").value);
+              document.querySelector("#" + firstLetter + "l").value = valueL;
+            } else {
+              document.querySelector("#" + reg.value).value = pushVar;
+            }
+
         regArray.pop();
         document.querySelector("#stack-list").innerHTML = "";
         for(let i = regArray.length-1; i >= 0; i--) {
