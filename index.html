@@ -450,7 +450,7 @@
         let toId = to.substring(0, 2);
         let toIdLower = toId.toLowerCase();
 
-        let results = [fromValue, fromId, toId, toIdLower, fromIdLower];
+        let results = [fromValue, fromId, toId, toIdLower, fromIdLower, toValue];
 
         return results;
       }
@@ -479,13 +479,18 @@
         return results;
       }
 
-      function loadToX(fromIdLower, fromValue, toIdLower) {
+      function loadToX(fromValue, toIdLower) {
+        // console.log("toValue: "+fromValue);
         let valueH = fromValue.substring(0,2);
         let valueL = fromValue.substring(2);
         let firstLetter = toIdLower.charAt(0);
+        console.log(valueH);
+        console.log(valueL);
 
         document.querySelector("#" + firstLetter + "h").value = valueH;
         document.querySelector("#" + firstLetter + "l").value = valueL;
+        // console.log("H "+document.querySelector("#" + firstLetter + "h").value);
+        // console.log("L "+document.querySelector("#" + firstLetter + "l").value);
       }
 
       // MOV
@@ -503,7 +508,7 @@
         switch (addrMode) {
           case "direct":
             if (results[4].charAt(1) == "x") {
-              loadToX(results[4], results[0], results[3]);
+              loadToX(results[0], results[3]);
             } else {
               document.querySelector("#" + results[3]).value = results[0];
             }
@@ -538,10 +543,10 @@
               } else {
                 document.querySelector("#history-list").innerHTML +=
                   "<li>MOV " + results[1] + ", " + results[2] + "</li>";
-                  if (results[1].charAt(1) == "x") {
-                    loadToX(results[3], results[5], results[1]);
+                  if (results[4].charAt(1) == "x") {
+                    loadToX(results[0], results[3]);
                   } else {
-                    document.querySelector("#" + results[3]).value = results[0];
+                    document.querySelector("#" + results[1]).value = results[0];
                   }
               }
             }
