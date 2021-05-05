@@ -479,6 +479,15 @@
         return results;
       }
 
+      function loadToX(fromIdLower, fromValue, toIdLower) {
+        let valueH = fromValue.substring(0,2);
+        let valueL = fromValue.substring(2);
+        let firstLetter = toIdLower.charAt(0);
+
+        document.querySelector("#" + firstLetter + "h").value = valueH;
+        document.querySelector("#" + firstLetter + "l").value = valueL;
+      }
+
       // MOV
       function mov() {
         let results = fetchData(),
@@ -494,14 +503,7 @@
         switch (addrMode) {
           case "direct":
             if (results[4].charAt(1) == "x") {
-              valueH = results[0].substring(0, 2);
-              valueL = results[0].substring(2);
-              // console.log(valueH);
-              // console.log(valueL);
-              let firstLetter = results[3].charAt(0);
-              // console.log(firstLetter);
-              document.querySelector("#" + firstLetter + "h").value = valueH;
-              document.querySelector("#" + firstLetter + "l").value = valueL;
+              loadToX(results[4], results[0], results[3]);
             } else {
               document.querySelector("#" + results[3]).value = results[0];
             }
@@ -536,10 +538,11 @@
               } else {
                 document.querySelector("#history-list").innerHTML +=
                   "<li>MOV " + results[1] + ", " + results[2] + "</li>";
-                  valueH = results[0].substring(0, 2);
-                  valueL = results[0].substring(2);
-                  let value = valueH + valueL;
-                  document.querySelector("#" + results[3]).value = value;
+                  if (results[1].charAt(1) == "x") {
+                    loadToX(results[3], results[5], results[1]);
+                  } else {
+                    document.querySelector("#" + results[3]).value = results[0];
+                  }
               }
             }
             break;
