@@ -151,7 +151,7 @@
             name="addr"
             class="addrMode"
             value="direct"
-            onclick="showComp('#direct')"
+            onclick="showComp('#direct'), hideComps('#indexing', '#base', '#index-base')"
           />
           <label for="direct">bezpośrednie</label><br />
           <input
@@ -159,7 +159,7 @@
             name="addr"
             class="addrMode"
             value="index"
-            onclick="showComp('#indexing')"
+            onclick="showComp('#indexing'), hideComps('#direct', '#base', '#index-base')"
           />
           <label for="index">indeksowe</label><br />
           <input
@@ -167,7 +167,7 @@
             name="addr"
             class="addrMode"
             value="base"
-            onclick="showComp('#base')"
+            onclick="showComp('#base'), hideComps('#direct', '#indexing', '#index-base')"
           />
           <label for="base">bazowe</label><br />
           <input
@@ -175,7 +175,7 @@
             name="addr"
             class="addrMode"
             value="index-base"
-            onclick="showComp('#index-base')"
+            onclick="showComp('#index-base'), hideComps('#direct', '#indexing', '#base')"
           />
           <label for="index-base">indeksowo-bazowe</label>
         </div>
@@ -355,13 +355,10 @@
         let regExp = new RegExp(/^[0-9A-F]{1,2}$/i);
         for (let i = 0; i < regArr.length; i++) {
           if (!regExp.test(regArr[i].value)) {
-            alert(
-              "Proszę wypełnić rejestry liczbami w systemie szesnastkowym - cyfry 0-9 i/lub znaki A-F"
-            );
+            alert ("Proszę wypełnić rejestry liczbami w systemie szesnastkowym - cyfry 0-9 i/lub znaki A-F");
+            document.querySelector(".main-ops").style.setProperty("display", "none");
           } else {
-            document
-              .querySelector(".main-ops")
-              .style.setProperty("display", "flex");
+            document.querySelector(".main-ops").style.setProperty("display", "flex");
           }
         }
       }
@@ -372,6 +369,12 @@
 
       function showComp(id) {
         document.querySelector(id).style.setProperty("display", "block");  
+      }
+
+      function hideComps(id1, id2, id3) {
+        document.querySelector(id1).style.setProperty("display", "none");  
+        document.querySelector(id2).style.setProperty("display", "none");  
+        document.querySelector(id3).style.setProperty("display", "none");  
       }
       // GET VALUE OF A REGISTER
       function getValue(id) {
@@ -484,13 +487,30 @@
         let valueH = fromValue.substring(0,2);
         let valueL = fromValue.substring(2);
         let firstLetter = toIdLower.charAt(0);
-        console.log(valueH);
-        console.log(valueL);
+        // console.log(valueH);
+        // console.log(valueL);
 
         document.querySelector("#" + firstLetter + "h").value = valueH;
         document.querySelector("#" + firstLetter + "l").value = valueL;
         // console.log("H "+document.querySelector("#" + firstLetter + "h").value);
         // console.log("L "+document.querySelector("#" + firstLetter + "l").value);
+      }
+
+      // Text to hex value
+      function text2hex(x) {
+        return parseInt(x, 16);
+      }
+
+      function hex2text(x) {
+        return x.toString(16).toUpperCase();
+      }
+
+      function calcAddr(addr, disp) {
+        let hexAddr = text2hex(addr);
+        let dispAddr = text2hex(disp);
+        let result = hexAddr + dispAddr;
+
+        return hex2text(result);
       }
 
       // MOV
@@ -540,6 +560,15 @@
                   ", [" +
                   results[2] +
                   " + DISP]</li>";
+
+                  disp = text2hex(document.querySelector("#disp").value);
+                  val = text2hex(results[5]);
+                  let calcAddress = calcAddr(val, disp);
+                  // console.log(calcAddress);
+                  // console.log(results[4]);
+
+                  loadToX(calcAddress, results[4]);
+
               } else {
                 document.querySelector("#history-list").innerHTML +=
                   "<li>MOV " + results[1] + ", " + results[2] + "</li>";
@@ -579,6 +608,14 @@
                   ", [" +
                   results[2] +
                   " + DISP]</li>";
+
+                  disp = text2hex(document.querySelector("#disp").value);
+                  val = text2hex(results[5]);
+                  let calcAddress = calcAddr(val, disp);
+                  // console.log(calcAddress);
+                  // console.log(results[4]);
+                  loadToX(calcAddress, results[4]);
+
               } else {
                 document.querySelector("#history-list").innerHTML +=
                   "<li>MOV " + results[1] + ", " + results[2] + "</li>";
@@ -591,8 +628,7 @@
       function xchg() {
         let results = fetchData();
         let temp = "";
-        let addrMode = document.querySelector('input[name="addr"]:checked')
-          .value;
+        let addrMode = document.querySelector('input[name="addr"]:checked').value;
 
         switch (addrMode) {
           case "direct":
@@ -695,7 +731,6 @@
             console.log("Address mode error!");
         }
       }
-
       let regArray = new Array;
       function push() {
         let reg = document.querySelector("#choose-reg").value;
